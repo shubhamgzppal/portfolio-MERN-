@@ -45,7 +45,7 @@ A modern, responsive portfolio website built with the MERN stack (MongoDB, Expre
    npm run dev
    ```
 
-4. Open http://localhost:5173 to view the website
+4. Open https://shubhamgzppal.netlify.app/ to view the website
 
 ## Project Structure
 
