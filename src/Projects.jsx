@@ -14,8 +14,8 @@ const projectsData = {
       description: "A modern portfolio website built with React and Tailwind CSS, featuring dark mode, smooth transitions, and responsive design.",
       tech: ["React", "Tailwind CSS", "JavaScript"],
       image: portfolioImage,
-      link: "#",
-      github: "https://github.com/yourusername/portfolio"
+      link: "https://shubhamgzppal.netlify.app/",
+      github: "https://github.com/shubhamgzppal/portfolio-MERN-"
     },
     {
       title: "E-commerce Platform",
