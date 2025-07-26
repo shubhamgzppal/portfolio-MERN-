@@ -1,0 +1,27 @@
+// Colors
+$primary: #050816;
+$secondary: #aaa6c3;
+$tertiary: #151030;
+$black-100: #100d25;
+$black-200: #090325;
+$white-100: #f3f3f3;
+
+// Transitions
+$transition-bezier: cubic-bezier(.4,0,.2,1);
+$transition-duration: 0.3s;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Shadows
+$shadow-sm: 0 2px 8px rgba($primary, 0.13);
+$shadow-md: 0 8px 32px rgba($primary, 0.27);
+
+// Z-indices
+$z-modal: 50;
+$z-dropdown: 40;
+$z-header: 30;
+$z-content: 1;

@@ -1,0 +1,90 @@
+@use 'variables' as *;
+@use 'mixins' as m;
+
+// Reset and Base Styles
+html {
+  scroll-behavior: smooth;
+}
+
+// Modern forced colors mode
+@media (forced-colors: active) {
+  * {
+    forced-color-adjust: none;
+  }
+}
+
+body {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  @include m.heading;
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+  background: $tertiary;
+
+  &-thumb {
+    background: $primary;
+    border-radius: 4px;
+  }
+}
+
+// Focus styles
+:focus {
+  @include m.focus-ring;
+}
+
+// Button styles
+button {
+  @include m.transition(background, color, box-shadow);
+
+  &:active {
+    background: $tertiary;
+    color: $secondary;
+    box-shadow: $shadow-sm;
+  }
+}
+
+// Image styles
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  box-shadow: $shadow-sm;
+}
+
+// Link styles
+a {
+  @include m.transition(color);
+  
+  &:hover {
+    color: $secondary;
+  }
+
+  &.underline-animate {
+    position: relative;
+    text-decoration: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 2px;
+      background: $secondary;
+      transform: scaleX(0);
+      @include m.transition(transform);
+      transform-origin: left;
+    }
+
+    &:hover::after {
+      transform: scaleX(1);
+    }
+  }
+}

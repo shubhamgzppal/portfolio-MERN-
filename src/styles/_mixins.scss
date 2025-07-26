@@ -1,0 +1,67 @@
+@use 'variables' as *;
+
+// Display Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Animation Mixins
+@mixin transition($props...) {
+  transition-property: $props;
+  transition-duration: $transition-duration;
+  transition-timing-function: $transition-bezier;
+}
+
+@mixin hover-lift {
+  transition: transform 0.2s $transition-bezier, 
+              box-shadow 0.2s $transition-bezier;
+  will-change: transform, box-shadow;
+
+  &:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: $shadow-md;
+  }
+}
+
+// Media Queries
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) { @content; }
+  }
+  @if $breakpoint == md {
+    @media (min-width: $breakpoint-md) { @content; }
+  }
+  @if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) { @content; }
+  }
+  @if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) { @content; }
+  }
+}
+
+// Typography
+@mixin heading {
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+// Common Patterns
+@mixin glass-effect {
+  background: rgba($white-100, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($white-100, 0.1);
+}
+
+@mixin focus-ring {
+  outline: 2px solid $secondary;
+  outline-offset: 2px;
+}
