@@ -1,6 +1,8 @@
 import PageTransition from './components/PageTransition.jsx';
 import { useDomain } from './contexts/DomainContext';
 
+import ResumeCart from "./assets/SHUBHAM PAL Resume canav.pdf"
+
 // Common data that stays the same across domains
 const commonData = {
   education: [
@@ -234,7 +236,7 @@ export default function Resume() {
           </div>
           {/* Download Button */}
           <a
-            href="/src/assets/SHUBHAM PAL Resume canav.pdf"
+            href={ResumeCart}
             download="SHUBHAM PAL Resume canav.pdf"
             className="bouncy bg-secondary text-primary px-8 py-3 rounded-lg font-semibold shadow-card hover:bg-tertiary transition inline-flex items-center gap-2 group drop-shadow"
           >

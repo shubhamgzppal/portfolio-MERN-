@@ -4,13 +4,16 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { MotionContainer } from './components/MotionElements';
 
+import portfolioImage from './assets/Portfolio sceenshot.png';
+import ecommerceImage from './assets/E commerce screenshot.png';
+
 const projectsData = {
   FULL_STACK: [
     {
       title: "Portfolio Website",
       description: "A modern portfolio website built with React and Tailwind CSS, featuring dark mode, smooth transitions, and responsive design.",
       tech: ["React", "Tailwind CSS", "JavaScript"],
-      image: "/src/assets/Portfolio sceenshot.png",
+      image: portfolioImage,
       link: "#",
       github: "https://github.com/yourusername/portfolio"
     },
@@ -18,7 +21,7 @@ const projectsData = {
       title: "E-commerce Platform",
       description: "Full-featured online shopping platform with user authentication, payment integration, and admin dashboard.",
       tech: ["MERN Stack", "Redux", "Stripe"],
-      image: "/src/assets/E commerce screenshot.png",
+      image: ecommerceImage,
       link: "https://shubham-style-wear-xjug.vercel.app",
       github: "https://github.com/shubhamgzppal/Shubham-Style-Wear"
     }

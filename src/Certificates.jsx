@@ -2,13 +2,17 @@ import PageTransition from './components/PageTransition';
 import { useDomain } from './contexts/DomainContext';
 import { useState, useRef, useEffect } from 'react';
 
+import WebdegineCert from './assets/MSME WEB degsine certificate.pdf';
+import CoreJavaCert from './assets/Core Java Training - Certificate of Completion (2).pdf';
+import OLevelCert from './assets/Shubham pal o level certificate.pdf';
+
 const certificatesData = {
   FULL_STACK: [
     {
       title: "Web Designing Certificate",
       provider: "Ministry of Micro, Small & Medium Enterprises (MSME)",
       icon: "MSME",
-      url: "/src/assets/MSME WEB degsine certificate.pdf",
+      url: WebdegineCert,
       date: "10 Oct 2024",
       skills: ["HTML", "CSS", "JavaScript", "wordpress", "Bootstrap"]
     },
@@ -16,7 +20,7 @@ const certificatesData = {
       title: "Core Java",
       provider: "Internshala",
       icon: "💻",
-      url: "/src/assets/Core Java Training - Certificate of Completion (2).pdf",
+      url: CoreJavaCert,
       date: "2 Nov 2024",
       skills: ["Java Introduction and Installation", "Java Programming Fundamentals", "Object Oriented Programming", "Advanced Java Topics", "Database Handling using Java", "GUI Programming", "Java and AI Modules"]
     },
@@ -24,7 +28,7 @@ const certificatesData = {
       title: "O Level Certificate",
       provider: "Government of India, Ministry of Human Resource Development (MHRD)",
       icon: "NIELIT",
-      url: "/src/assets/Shubham pal o level certificate.pdf",
+      url: OLevelCert,
       date: "07 Mar 2022",
       skills: ["IT Tools and Business Systems", "Web Design and Development", "Programming and Problem Solving through Python", "Introduction to ICT Resources"]
     }
