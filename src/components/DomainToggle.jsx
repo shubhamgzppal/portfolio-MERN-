@@ -5,9 +5,9 @@ export default function DomainToggle() {
   
   return (    
     <button
-        //onClick={toggleDomain} // Uncomment this line to enable domain toggle functionality
-        className="fixed bottom-5 right-4 z-50 p-2 rounded-full bg-white/90 dark:bg-primary/90 shadow-xl border-2 border-secondary/20 backdrop-blur-sm hover:scale-105 group perspective-1000"
-        title="Switch Domain"
+        onClick={toggleDomain}
+        className="fixed bottom-5 right-4 z-50 p-2 hidden rounded-full bg-white/90 dark:bg-primary/90 shadow-xl border-2 border-secondary/20 backdrop-blur-sm hover:scale-105 group perspective-1000"
+        title="Switch Domain"   //remove hidden from css to show domain change toggle
       >        
       <div className="w-24 h-24 relative">
           {/* Fixed center text */}
