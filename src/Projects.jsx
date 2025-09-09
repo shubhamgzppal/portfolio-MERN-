@@ -1,11 +1,13 @@
 import PageTransition from './components/PageTransition.jsx';
-import { useDomain } from './contexts/DomainContext';
+// DomainContext removed - show both domain projects
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { MotionContainer } from './components/MotionElements';
 
 import portfolioImage from './assets/Portfolio sceenshot.png';
 import ecommerceImage from './assets/E commerce screenshot.png';
+import shubhamAIImage from './assets/Shubham AI screenshot.png';
+import shubhamBlogImage from './assets/Shubham Blog screenshot.png';
 
 const projectsData = {
   FULL_STACK: [
@@ -24,39 +26,29 @@ const projectsData = {
       image: ecommerceImage,
       link: "https://shubham-style-wear-xjug.vercel.app",
       github: "https://github.com/shubhamgzppal/Shubham-Style-Wear"
+    },
+    {
+      title: "Shubham AI",
+      description: "Next.js-based AI chat and image generation platform with authentication, subscriptions, and PayPal integration.",
+      tech: ["Next.js", "TypeScript", "Tailwind CSS", "MongoDB", "NextAuth", "PayPal", "Google Generative AI SDK"],
+      image: shubhamAIImage,
+      link: "https://shubham-ai.vercel.app/", 
+      github: "https://github.com/shubhamgzppal/Shubham-AI"
+    },
+    {
+      title: "Shubham Blog",
+      description: "Full-stack blogging application with a React + Vite frontend and Node.js backend, featuring admin dashboard, image uploads, and authentication.",
+      tech: ["React", "Vite", "Node.js", "Express", "MongoDB", "ImageKit"],
+      image: shubhamBlogImage,
+      link: "https://shubham-blog-6uey.vercel.app/",
+      github: "https://github.com/shubhamgzppal/Shubham-Blog"
     }
   ],
-  DATA_SCIENCE: [
-    {
-      title: "Predictive Analytics Dashboard",
-      description: "Interactive dashboard for sales forecasting and trend analysis using machine learning algorithms.",
-      tech: ["Python", "Scikit-learn", "Streamlit"],
-      image: "/path-to-dashboard-image.jpg",
-      link: "#",
-      github: "https://github.com/yourusername/analytics-dashboard"
-    },
-    {
-      title: "Customer Segmentation Analysis",
-      description: "Advanced customer segmentation using clustering algorithms and interactive visualizations.",
-      tech: ["Python", "K-means", "Matplotlib"],
-      image: "/path-to-segmentation-image.jpg",
-      link: "#",
-      github: "https://github.com/yourusername/customer-segmentation"
-    },
-    {
-      title: "Stock Market Prediction",
-      description: "Time series analysis and prediction model for stock market trends using deep learning.",
-      tech: ["Python", "TensorFlow", "Pandas"],
-      image: "/path-to-stocks-image.jpg",
-      link: "#",
-      github: "https://github.com/yourusername/stock-prediction"
-    }
-  ]
+  DATA_SCIENCE: []
 };
 
 export default function Projects() {
-  const { domainData } = useDomain();
-  const projects = projectsData[domainData.title === "Data Scientist" ? 'DATA_SCIENCE' : 'FULL_STACK'];
+  const projects = [...projectsData.FULL_STACK, ...projectsData.DATA_SCIENCE];
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -90,7 +82,7 @@ export default function Projects() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4 wavy-underline drop-shadow-lg">Projects</h2>
               <p className="text-gray-300 dark:text-gray-300 font-semibold drop-shadow mb-2">
-                Featured {domainData.title} projects that showcase my expertise
+                Featured projects that showcase my Full Stack and Data Science work
               </p>
             </motion.div>
 

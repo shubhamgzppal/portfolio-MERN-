@@ -1,5 +1,4 @@
 import PageTransition from './components/PageTransition';
-import { useDomain } from './contexts/DomainContext';
 import { useState, useRef, useEffect } from 'react';
 
 import WebdegineCert from './assets/MSME WEB degsine certificate.pdf';
@@ -42,37 +41,12 @@ const certificatesData = {
       url: PythonForDataScience,
       date: "16 Auguest 2025",
       skills: ["Python", "Data Analysis", "Data Visualization", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn"]
-    },
-    {
-      title: "Machine Learning Specialization",
-      provider: "Coursera",
-      icon: "🤖",
-      url: "/certificates/machine-learning-specialization-certificate.pdf",
-      date: "May 2024",
-      skills: ["Scikit-learn", "TensorFlow", "Neural Networks"]
-    },
-    {
-      title: "SQL and Database Design",
-      provider: "DataCamp",
-      icon: "🗃️",
-      url: "/certificates/sql-database-design-certificate.pdf",
-      date: "Apr 2024",
-      skills: ["SQL", "Database Design", "Data Modeling"]
-    },
-    {
-      title: "Data Visualization with Python",
-      provider: "Kaggle",
-      icon: "📈",
-      url: "/certificates/data-visualization-python-certificate.pdf",
-      date: "Mar 2024",
-      skills: ["Matplotlib", "Seaborn", "Data Visualization"]
     }
   ]
 };
 
 export default function Certificates() {
-  const { domainData } = useDomain();
-  const certificates = certificatesData[domainData.title === "Data Scientist" ? 'DATA_SCIENCE' : 'FULL_STACK'];
+  const certificates = [...certificatesData.FULL_STACK, ...certificatesData.DATA_SCIENCE];
   const [modal, setModal] = useState(null);
   const modalRef = useRef(null);
 
@@ -133,7 +107,7 @@ export default function Certificates() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 wavy-underline drop-shadow-lg">Certificates</h2>
             <p className="text-gray-300 dark:text-gray-300 font-semibold drop-shadow">
-              Professional certifications in {domainData.title} development
+              Professional certifications across Full Stack and Data Science
             </p>
           </div>
 

@@ -1,43 +1,38 @@
 import PageTransition from './components/PageTransition.jsx';
-import { useDomain } from './contexts/DomainContext';
 import { motion } from 'framer-motion';
 import { MotionContainer } from './components/MotionElements';
 import { useInView } from 'react-intersection-observer';
 import shubhamImg from "./assets/Shubham portfolio image.png"
 
 export default function About() {
-  const { domainData } = useDomain();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
   });
 
-  const domainContent = {
-    FULL_STACK: {
-      description: "I am a passionate developer with experience in building modern web applications using React, Node.js, and Tailwind CSS. I love creating beautiful, responsive, and user-friendly interfaces.",
-      detailedDescription: [
-        "I specialize in building modern web applications using the MERN stack and have a strong foundation in both frontend and backend technologies. My expertise includes React.js, Node.js, and modern CSS frameworks like Tailwind CSS.",
-        "Currently pursuing a Diploma in Information Technology, I combine academic knowledge with practical development experience to create efficient and scalable solutions.",
-        "With a keen eye for detail and a passion for clean code, I focus on creating responsive and user-friendly interfaces that deliver exceptional user experiences. I stay updated with the latest web technologies and best practices to ensure cutting-edge solutions.",
-        "My experience extends to working with version control systems like Git, and I have hands-on experience with cloud platforms including AWS and Google Cloud. I'm always excited to take on new challenges and contribute to innovative projects."
-      ],
-      quote: "I believe in writing clean, maintainable code and creating intuitive user experiences that make a difference.",
-      skills: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JavaScript', 'Tailwind CSS', 'Git']
-    },
-    DATA_SCIENCE: {
-      description: "I am a data enthusiast with a strong foundation in machine learning, statistical analysis, and data visualization. I transform complex data into actionable insights.",
-      detailedDescription: [
-        "I specialize in data analysis and machine learning, using Python and its powerful ecosystems to extract meaningful insights from complex datasets.",
-        "Currently pursuing a Diploma in Information Technology with a focus on data science and analytics, I combine theoretical knowledge with practical implementation.",
-        "With expertise in data visualization and statistical analysis, I focus on creating clear, actionable insights that drive business decisions. I stay current with the latest machine learning techniques and best practices.",
-        "My experience includes working with various data processing tools and frameworks, and I have hands-on experience with cloud-based machine learning platforms. I'm passionate about solving complex problems through data-driven approaches."
-      ],
-      quote: "I believe in the power of data to drive innovation and transform decision-making processes.",
-      skills: ['Python', 'Machine Learning', 'Data Analysis', 'SQL', 'Pandas', 'NumPy', 'Scikit-learn']
-    }
-  };
+  const COMBINED_PROFILE= {
+  description: "I am a passionate developer and data enthusiast with experience in building modern web applications and applying data science techniques. With expertise in the MERN stack, machine learning, and data analysis, I enjoy creating responsive, user-friendly interfaces while also transforming complex data into actionable insights.",
 
-  const content = domainContent[domainData.title === "Data Scientist" ? 'DATA_SCIENCE' : 'FULL_STACK'];
+  detailedDescription: [
+    "I specialize in building modern web applications using the MERN stack and have a strong foundation in both frontend and backend technologies. My expertise includes React.js, Node.js, and modern CSS frameworks like Tailwind CSS.",
+    "Alongside web development, I have a strong background in data science, specializing in data analysis and machine learning with Python and its powerful libraries such as Pandas, NumPy, and Scikit-learn.",
+    "Currently pursuing a Diploma in Information Technology, I combine academic knowledge with practical experience in both software development and data-driven problem solving.",
+    "With a keen eye for detail and a passion for clean, maintainable code, I focus on building responsive, user-friendly applications and creating clear, actionable insights from complex datasets.",
+    "My experience extends to version control systems like Git, and I have hands-on experience with cloud platforms such as AWS and Google Cloud. I stay updated with the latest web and data technologies to ensure cutting-edge and scalable solutions.",
+    "I am passionate about solving complex challenges through a blend of intuitive user experiences and data-driven decision-making."
+  ],
+  
+  quote: "I believe in writing clean, maintainable code and harnessing the power of data to create innovative, user-centric solutions.",
+  
+  skills: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JavaScript', 'Tailwind CSS', 'Git', 'Python', 'Machine Learning', 'Data Analysis', 'SQL', 'Pandas', 'NumPy', 'Scikit-learn'],
+
+  }
+
+  
+  const combinedDetailed = COMBINED_PROFILE.detailedDescription;
+  const combinedShort = `${COMBINED_PROFILE.description}`;
+  const combinedQuote = `${COMBINED_PROFILE.quote}`;
+  const combinedSkills = COMBINED_PROFILE.skills;
 
   return (
     <PageTransition>      
@@ -67,32 +62,18 @@ export default function About() {
                   className="text-lg md:text-xl mb-6 backdrop-blur-sm bg-white/5 dark:bg-black/5 p-4 rounded-lg transform-gpu hover:scale-[1.02] transition-transform duration-300 font-semibold drop-shadow"
                 >
                   Hi, I'm <span className="text-secondary font-semibold">Shubham Pal</span>, 
-                  a {domainData.title} based in Ghazipur, {content.description}
+                  a Full Stack Developer and Data Scientist based in Ghazipur. {combinedShort}
                 </motion.div>
 
                 <div 
                   ref={ref}
                   className="text-base text-white dark:text-gray-300 space-y-4 backdrop-blur-sm bg-white/5 dark:bg-black/5 p-4 rounded-lg font-semibold drop-shadow"
                 >
-                  {content.detailedDescription.map((paragraph, index) => (
-                    <motion.p 
-                      key={index}
-                      initial={{ y: 20, opacity: 0, rotateY: 6 }}
-                      animate={inView ? { y: 0, opacity: 1, rotateY: 0 } : {}}
-                      transition={{ duration: 0.5, delay: index * 0.2 }}
-                      className="font-semibold drop-shadow"
-                    >
-                      {paragraph}
-                    </motion.p>
+                  <h3 className="text-lg font-semibold text-secondary mb-2">Profile Overview</h3>
+                  {combinedDetailed.map((paragraph, index) => (
+                    <motion.p key={"combined-"+index} initial={{ y: 20, opacity: 0 }} animate={inView ? { y: 0, opacity: 1 } : {}} transition={{ duration: 0.5, delay: index * 0.12 }} className="font-semibold drop-shadow">{paragraph}</motion.p>
                   ))}
-                  <motion.p 
-                    className="text-secondary/90 font-medium italic drop-shadow"
-                    initial={{ y: 20, opacity: 0, rotateY: 6 }}
-                    animate={inView ? { y: 0, opacity: 1, rotateY: 0 } : {}}
-                    transition={{ duration: 0.5, delay: 0.8 }}
-                  >
-                    "{content.quote}"
-                  </motion.p>
+                  <motion.p className="text-secondary/90 font-medium italic drop-shadow" initial={{ y: 20, opacity: 0 }} animate={inView ? { y: 0, opacity: 1 } : {}} transition={{ duration: 0.5, delay: 0.6 }}>{combinedQuote}</motion.p>
                 </div>
 
                 <motion.div 
@@ -103,18 +84,8 @@ export default function About() {
                 >
                   <h3 className="text-xl font-semibold mb-4 text-secondary">Core Technologies</h3>
                   <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                    {content.skills.map((skill, index) => (
-                      <motion.span 
-                        key={skill} 
-                        className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm hover:bg-secondary/20 transition-colors font-semibold drop-shadow"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={inView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                      >
-                        {skill}
-                      </motion.span>
+                    {combinedSkills.map((skill, index) => (
+                      <motion.span key={index} className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm hover:bg-secondary/20 transition-colors font-semibold drop-shadow" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.3, delay: index * 0.06 }}>{skill}</motion.span>
                     ))}
                   </div>
                 </motion.div>
@@ -163,7 +134,7 @@ export default function About() {
               </motion.div>
 
               <motion.div 
-                className="w-2/3 sm:w-1/2 lg:w-2/5 flex items-center justify-center mt-8 lg:mt-12"
+                className="w-2/3 sm:w-1/2 lg:w-2/5 flex items-center justify-center mt-8 lg:mt-40"
                 initial={{ x: 50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.6 }}
@@ -180,7 +151,7 @@ export default function About() {
                 >
                   <motion.img
                     src={shubhamImg}
-                    alt={`Shubham Pal - ${domainData.title}`}
+                    alt={`Shubham Pal`}
                     className="block rounded-2xl"
                     initial={{ scale: 1.2, rotateY: 12, rotateX: 6 }}
                     animate={{ scale: 1, rotateY: 0, rotateX: 0 }}

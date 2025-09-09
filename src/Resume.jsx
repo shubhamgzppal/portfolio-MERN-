@@ -1,5 +1,4 @@
 import PageTransition from './components/PageTransition.jsx';
-import { useDomain } from './contexts/DomainContext';
 
 import ResumeCart from "./assets/SHUBHAM PAL Resume canav.pdf"
 
@@ -115,8 +114,8 @@ const domainData = {
 };
 
 export default function Resume() {
-  const { domainData: currentDomain } = useDomain();
-  const content = domainData[currentDomain.title === "Data Scientist" ? 'DATA_SCIENCE' : 'FULL_STACK'];
+  // Show combined resume information; download is the same PDF
+  const content = { ...domainData.FULL_STACK };
 
   return (
     <PageTransition>

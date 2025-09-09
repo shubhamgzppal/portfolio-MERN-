@@ -9,10 +9,9 @@ import Footer from './Footer';
 import Sidebar from './sidebar';
 import Navbar from './Navbar';
 import DarkModeToggle from './DarkModeToggle';
-import DomainToggle from './components/DomainToggle';
 import Background3D from './components/Background3D';
 import { useState, useEffect } from 'react';
-import { DomainProvider } from './contexts/DomainContext';
+// DomainContext removed — components will render combined content without provider
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -79,7 +78,6 @@ function App() {
   };
 
   return (
-    <DomainProvider>
       <div className="relative min-h-screen flex flex-col">
         {/* Overlay for mobile/tablet when sidebar is open */}
         {sidebarOpen && (
@@ -125,11 +123,7 @@ function App() {
           </button>
         )}
 
-        {/* Domain Toggle */}
-        <div className="fixed right-4 bottom-4 z-50">
-          <DomainToggle />
-        </div>
-
+  {/* Domain toggle removed: showing all content by default */}
         {/* Dark Mode Toggle */}
         <div className="fixed right-4 top-4 z-50">
           <DarkModeToggle dark={dark} setDark={setDark} />
@@ -138,8 +132,7 @@ function App() {
         <Background3D
           theme={dark ? 'dark' : 'light'}
         />
-      </div>
-    </DomainProvider>
+  </div>
   );
 }
 
