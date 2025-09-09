@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import WebdegineCert from './assets/MSME WEB degsine certificate.pdf';
 import CoreJavaCert from './assets/Core Java Training - Certificate of Completion (2).pdf';
 import OLevelCert from './assets/Shubham pal o level certificate.pdf';
+import PythonForDataScience from './assets/Shubham Pal Python 101 for Data Science (IBM) certificate.pdf';
 
 const certificatesData = {
   FULL_STACK: [
@@ -14,7 +15,7 @@ const certificatesData = {
       icon: "MSME",
       url: WebdegineCert,
       date: "10 Oct 2024",
-      skills: ["HTML", "CSS", "JavaScript", "wordpress", "Bootstrap"]
+      skills: ["HTML", "CSS", "JavaScript", "wordpress", "Bootstrap", "Responsive Design", "Web Development Fundamentals", "UI/UX Principles", "Web Accessibility", "Web Hosting and Deployment", "Web Design Tools"]
     },
     {
       title: "Core Java",
@@ -35,12 +36,12 @@ const certificatesData = {
   ],
   DATA_SCIENCE: [
     {
-      title: "Data Science Professional Certificate",
+      title: "Python 101 for Data Science",
       provider: "IBM",
       icon: "📊",
-      url: "/certificates/data-science-professional-certificate.pdf",
-      date: "Jun 2024",
-      skills: ["Python", "Data Analysis", "Machine Learning"]
+      url: PythonForDataScience,
+      date: "16 Auguest 2025",
+      skills: ["Python", "Data Analysis", "Data Visualization", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn"]
     },
     {
       title: "Machine Learning Specialization",
