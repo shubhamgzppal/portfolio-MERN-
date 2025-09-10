@@ -6,23 +6,20 @@ export default function Sidebar({ open, onClose, theme = "dark" }) {
   // Close sidebar if click outside (on mobile)
   useEffect(() => {
     function handleClick(e) {
-      // Only close if click is outside the sidebar
-      if (
-        open &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(e.target)
-      ) {
+      if (!open) return;
+      // Only close if click is outside the sidebar and not on the menu button
+      if (!sidebarRef.current?.contains(e.target) && !e.target.closest('[aria-label="Open menu"]')) {
         onClose();
       }
     }
-    if (open) {
-      // Use capture phase to ensure this runs before other handlers
-      document.addEventListener("mousedown", handleClick, true);
-      document.addEventListener("touchstart", handleClick, true);
-    }
+    
+    // Using regular event phase instead of capture to allow other interactions
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("touchstart", handleClick);
+    
     return () => {
-      document.removeEventListener("mousedown", handleClick, true);
-      document.removeEventListener("touchstart", handleClick, true);
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("touchstart", handleClick);
     };
   }, [open, onClose]);
 
@@ -48,7 +45,7 @@ export default function Sidebar({ open, onClose, theme = "dark" }) {
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 z-50 flex flex-col w-64 h-screen justify-around items-center backdrop-blur-lg shadow-card py-4 sm:py-6 px-3 sm:px-4 gap-6 sm:gap-8 lg:gap-10 rounded-r-3xl border-r border-white/10 lg:hidden transition-all ease-in-out duration-500 ${
+        className={`fixed top-0 left-0 z-50 flex flex-col w-64 h-screen justify-around items-center backdrop-blur-lg bg-primary/95 dark:bg-gray-900/95 shadow-card py-4 sm:py-6 px-3 sm:px-4 gap-6 sm:gap-8 lg:gap-10 rounded-r-3xl border-r border-white/10 lg:hidden transition-all ease-in-out duration-500 ${
           open ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
         }`}
         tabIndex={-1}

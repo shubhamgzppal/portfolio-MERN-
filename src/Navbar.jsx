@@ -1,7 +1,7 @@
 const Navbar = () => {
   return (
     <nav
-      className="hidden lg:flex fixed top-0 left-0 right-0 z-40 bg-primary/70 backdrop-blur-lg shadow-card transition-transform duration-300 translate-y-0"
+      className="hidden lg:flex fixed top-0 left-0 right-0 z-40 bg-primary/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-card transition-transform duration-300 translate-y-0"
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
@@ -19,7 +19,8 @@ const Navbar = () => {
             <li>
               <a
                 href="#about"
-                className="hover:text-gray-300 transition font-semibold drop-shadow"
+                className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 About
               </a>
@@ -27,7 +28,8 @@ const Navbar = () => {
             <li>
               <a
                 href="#projects"
-                className="hover:text-gray-300 transition font-semibold drop-shadow"
+                className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 Projects
               </a>
@@ -35,7 +37,8 @@ const Navbar = () => {
             <li>
               <a
                 href="#certificates"
-                className="hover:text-gray-300 transition font-semibold drop-shadow"
+                className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 Certificates
               </a>
@@ -43,7 +46,8 @@ const Navbar = () => {
             <li>
               <a
                 href="#education"
-                className="hover:text-gray-300 transition font-semibold drop-shadow"
+                className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 Education
               </a>
@@ -51,7 +55,8 @@ const Navbar = () => {
             <li>
               <a
                 href="#resume"
-                className="hover:text-gray-300 transition font-semibold drop-shadow"
+                className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 Resume
               </a>
@@ -59,7 +64,8 @@ const Navbar = () => {
             <li>
               <a
                 href="#contact"
-                className="hover:text-gray-300 transition font-semibold drop-shadow"
+                className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 Contact
               </a>
@@ -71,7 +77,8 @@ const Navbar = () => {
               href="https://github.com/shubhamgzppal"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white-100 hover:text-gray-300 transition font-semibold drop-shadow"
+              className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <span className="sr-only">GitHub</span>
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -80,7 +87,8 @@ const Navbar = () => {
             </a>
             <a
               href="#contact"
-              className="text-white-100 hover:text-gray-300 transition font-semibold drop-shadow"
+              className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <span className="sr-only">Email</span>
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -91,7 +99,8 @@ const Navbar = () => {
               href="https://www.linkedin.com/in/shubham-pal-700215253/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white-100 hover:text-gray-300 transition font-semibold drop-shadow"
+              className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <span className="sr-only">LinkedIn</span>
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

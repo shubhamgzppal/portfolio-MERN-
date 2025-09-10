@@ -19,6 +19,18 @@ function App() {
   const [dark, setDark] = useState(() =>
     window.matchMedia('(prefers-color-scheme: dark)').matches
   );
+  
+  // Add a class to the body to prevent scrolling when sidebar is open
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [sidebarOpen]);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -77,61 +89,47 @@ function App() {
   };
 
   return (
-      <div className="relative min-h-screen flex flex-col">
-        {/* Global 3D background that adapts to each section */}
-        <Background3D theme={dark ? 'dark' : 'light'} section={activeSection} />
-        {/* Overlay for mobile/tablet when sidebar is open */}
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-            onClick={e => {
-              // Prevent closing if click is inside the sidebar
-              const sidebar = document.querySelector('aside[role="dialog"]');
-              if (sidebar && sidebar.contains(e.target)) return;
-              setSidebarOpen(false);
-            }}
-            aria-label="Close sidebar overlay"
-          />
-        )}
-        {/* Menu Button for mobile/tablet */}
+    <div className="relative min-h-screen flex flex-col">
+      {/* Global 3D background that adapts to each section */}
+      <Background3D theme={dark ? 'dark' : 'light'} section={activeSection} />
+      
+      {/* Menu Button for mobile/tablet */}
+      <button
+        className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/20 dark:bg-gray-800/80 hover:bg-secondary/30 dark:hover:bg-gray-700/80 transition transform lg:hidden shadow-md"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Open menu"
+      >
+        {/* Hamburger Icon */}
+        <svg className="w-7 h-7 text-secondary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      
+      <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} activeSection={activeSection} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      
+      <main className="flex-grow">
+        {renderActiveSection()}
+      </main>
+
+      <Footer />
+
+      {/* Back to Top Button */}
+      {showTop && (
         <button
-          className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/20 hover:bg-secondary/30 transition transform lg:hidden shadow-md"
-          onClick={() => setSidebarOpen(true)}
-          aria-label="Open menu"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed right-4 bottom-32 z-50 p-2 rounded-full bg-white dark:bg-primary/40 shadow-xl border border-secondary/10 backdrop-blur-sm transition-all duration-300 hover:scale-110"
+          title="Back to Top"
         >
-          {/* Hamburger Icon */}
-          <svg className="w-7 h-7 text-secondary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          <div className="w-10 h-10 flex items-center justify-center text-2xl">⬆️</div>
         </button>
-        <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} activeSection={activeSection} />
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        
-        <main className="flex-grow">
-          {renderActiveSection()}
-        </main>
+      )}
 
-        <Footer />
-
-        {/* Back to Top Button */}
-        {showTop && (
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed right-4 bottom-32 z-50 p-2 rounded-full bg-white dark:bg-primary/40 shadow-xl border border-secondary/10 backdrop-blur-sm transition-all duration-300 hover:scale-110"
-            title="Back to Top"
-          >
-            <div className="w-10 h-10 flex items-center justify-center text-2xl">⬆️</div>
-          </button>
-        )}
-
-  {/* Domain toggle removed: showing all content by default */}
-        {/* Dark Mode Toggle */}
-        <div className="fixed right-4 top-4 z-50">
-          <DarkModeToggle dark={dark} setDark={setDark} />
-        </div>
-        {/* Show video background for both modes */}
-        
-  </div>
+      {/* Dark Mode Toggle */}
+      <div className="fixed right-4 top-4 z-50">
+        <DarkModeToggle dark={dark} setDark={setDark} />
+      </div>
+    </div>
   );
 }
 
