@@ -8,15 +8,7 @@ export default defineConfig({
     port: 3000
   },
   css: {
-    devSourcemap: true,
-    preprocessorOptions: {
-      scss: {
-        additionalData: '@use "sass:math";',
-        sassOptions: {
-          includePaths: [path.resolve(__dirname, './src/styles')]
-        }
-      }
-    }
+  devSourcemap: true
   },
   resolve: {
     alias: {

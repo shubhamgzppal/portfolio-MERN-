@@ -55,7 +55,7 @@ export default function Contact() {
     <PageTransition>
       <section className="bg-transparent dark:bg-transparent text-white-100 dark:text-white-100 items-center py-16 px-4" id="contact">
         <MotionContainer>
-          <div className="max-w-4xl mx-auto ">
+          <div className="max-w-4xl mx-auto z-10">
             <div className="text-center mb-12">
               <motion.div
                 initial={{ y: -20, opacity: 0 }}

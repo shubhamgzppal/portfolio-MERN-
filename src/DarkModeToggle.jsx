@@ -7,7 +7,7 @@ export default function DarkModeToggle({ dark, setDark }) {
       className="p-2 rounded bg-transparent text-secondary dark:text-tertiary border border-secondary/20 dark:border-tertiary/20 hover:border-secondary dark:hover:border-tertiary hover:bg-secondary/10 dark:hover:bg-tertiary/10 transition-all"
       aria-label="Toggle dark mode"
     >
-      {dark ? "🌙" : "☀️"}
+      {dark ? "Liquid" : "Ball"}
     </button>
   );
 }

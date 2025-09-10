@@ -10,7 +10,7 @@ const PageTransition = ({ children }) => {
         duration: 0.5, 
         ease: [0.43, 0.13, 0.23, 0.96] // Custom easing for smoother animation
       }}
-      className="w-full"
+      className="w-full z-1"
     >
       {children}
     </motion.div>

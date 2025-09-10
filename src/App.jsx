@@ -11,7 +11,6 @@ import Navbar from './Navbar';
 import DarkModeToggle from './DarkModeToggle';
 import Background3D from './components/Background3D';
 import { useState, useEffect } from 'react';
-// DomainContext removed — components will render combined content without provider
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -79,6 +78,8 @@ function App() {
 
   return (
       <div className="relative min-h-screen flex flex-col">
+        {/* Global 3D background that adapts to each section */}
+        <Background3D theme={dark ? 'dark' : 'light'} section={activeSection} />
         {/* Overlay for mobile/tablet when sidebar is open */}
         {sidebarOpen && (
           <div
@@ -129,9 +130,7 @@ function App() {
           <DarkModeToggle dark={dark} setDark={setDark} />
         </div>
         {/* Show video background for both modes */}
-        <Background3D
-          theme={dark ? 'dark' : 'light'}
-        />
+        
   </div>
   );
 }

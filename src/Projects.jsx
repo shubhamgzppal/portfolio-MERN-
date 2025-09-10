@@ -1,5 +1,4 @@
 import PageTransition from './components/PageTransition.jsx';
-// DomainContext removed - show both domain projects
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { MotionContainer } from './components/MotionElements';
