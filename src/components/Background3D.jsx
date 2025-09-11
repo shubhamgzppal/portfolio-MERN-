@@ -10,7 +10,7 @@ const Background3D = ({ theme, section = 'home' }) => {
   const isLight = mode === 'light';
 
   // Define color palettes for light and dark modes
-  const lightPalette = ['#6d52d9', '#bfb8b4', '#f5f2f3'];
+  const lightPalette = ['#060016', '#bfb8b4', '#3f4ce0' , '#baadf0' ];
   const darkPalette = ['#5227FF', '#FF9FFC', '#B19EEF'];
 
   return (
@@ -20,7 +20,6 @@ const Background3D = ({ theme, section = 'home' }) => {
           <Ballpit
             colors={lightPalette}
             className="w-full h-full"
-
           />
         ) : (
           <LiquidEther

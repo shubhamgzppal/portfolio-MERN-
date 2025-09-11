@@ -551,10 +551,7 @@ class Y extends c {
 
 const X = {
   count: 100,
-  colors: [0,0,0], 
-  ambientColor: 16,
-  ambientIntensity: 0.5,
-  lightIntensity: 50,
+  colors: [0,0,0,0], // first color is for light, second is for size0 ball, others are interpolated
   materialParams: {
     metalness: 0.5,
     roughness: 0.5,
@@ -567,12 +564,12 @@ const X = {
   gravity: 0.01,
   friction: 0.9975,
   wallBounce: 0.95,
-  maxVelocity: 0.15,
-  maxX: 5,
-  maxY: 5,
+  maxVelocity: 0.2,
+  maxX: 10,
+  maxY: 10,
   maxZ: 2,
-  controlSphere0: true,
-  followCursor: true
+  controlSphere0: false,
+  followCursor: false
 };
 
 const U = new m();
@@ -615,7 +612,8 @@ class Z extends d {
         return {
           setColors,
           getColorAt: function (ratio, out = new l()) {
-            const scaled = Math.max(0, Math.min(1, ratio)) * (t.length - 1);
+            // Start from second color to avoid using size0 color
+            const scaled = Math.max(0, Math.min(1, ratio)) * (t.length - 2) + 1;
             const idx = Math.floor(scaled);
             const start = i[idx];
             if (idx >= t.length - 1) return start.clone();
@@ -629,9 +627,11 @@ class Z extends d {
         };
       })(e);
       for (let idx = 0; idx < this.count; idx++) {
-        this.setColorAt(idx, t.getColorAt(idx / this.count));
+        // Skip first color (size0 color) for all balls
+        this.setColorAt(idx, t.getColorAt((idx + 1) / this.count));
         if (idx === 0) {
-          this.light.color.copy(t.getColorAt(idx / this.count));
+          // Use second color for light instead of first
+          this.light.color.copy(t.getColorAt(1));
         }
       }
       this.instanceColor.needsUpdate = false;
