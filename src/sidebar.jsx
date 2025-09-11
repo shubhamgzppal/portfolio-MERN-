@@ -34,7 +34,7 @@ export default function Sidebar({ open, onClose, theme = "dark" }) {
       {/* Overlay for mobile and tablet */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 xl:hidden"
           onClick={e => {
             // Prevent closing if click is inside the sidebar
             if (sidebarRef.current && sidebarRef.current.contains(e.target)) return;
@@ -45,7 +45,7 @@ export default function Sidebar({ open, onClose, theme = "dark" }) {
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 z-50 flex flex-col w-64 h-screen justify-around items-center backdrop-blur-lg bg-primary/95 dark:bg-gray-900/95 shadow-card py-4 sm:py-6 px-3 sm:px-4 gap-6 sm:gap-8 lg:gap-10 rounded-r-3xl border-r border-white/10 lg:hidden transition-all ease-in-out duration-500 ${
+        className={`fixed top-0 left-0 z-50 flex flex-col w-64 h-screen justify-around items-center backdrop-blur-lg bg-primary/95 dark:bg-gray-900/95 shadow-card py-4 sm:py-6 px-3 sm:px-4 gap-6 sm:gap-8 lg:gap-10 rounded-r-3xl border-r border-white/10 xl:hidden transition-all ease-in-out duration-500 ${
           open ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
         }`}
         tabIndex={-1}

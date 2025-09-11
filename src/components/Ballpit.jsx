@@ -551,9 +551,8 @@ class Y extends c {
 
 const X = {
   count: 200,
-  // nicer default palette (violet -> pink -> soft)
   colors: ['#5227FF', '#FF9FFC', '#B19EEF'],
-  ambientColor: 16777215,
+  ambientColor: 16,
   ambientIntensity: 1,
   lightIntensity: 200,
   materialParams: {
@@ -572,7 +571,7 @@ const X = {
   maxX: 5,
   maxY: 5,
   maxZ: 2,
-  controlSphere0: false,
+  controlSphere0: true,
   followCursor: true
 };
 
@@ -738,6 +737,7 @@ function createBallpit(e, t = {}) {
 }
 
 const Ballpit = ({ className = '', followCursor = true, ...props }) => {
+  followCursor = true;
   const canvasRef = useRef(null);
   const spheresInstanceRef = useRef(null);
 
@@ -763,7 +763,7 @@ const Ballpit = ({ className = '', followCursor = true, ...props }) => {
     }
 
     console.debug('[Ballpit] initializing');
-    spheresInstanceRef.current = createBallpit(canvas, { followCursor, ...props });
+    spheresInstanceRef.current = createBallpit(canvas, { followCursor : true, ...props });
 
     return () => {
       console.debug('[Ballpit] disposing');

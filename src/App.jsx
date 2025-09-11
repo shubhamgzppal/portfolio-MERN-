@@ -19,6 +19,8 @@ function App() {
   const [dark, setDark] = useState(() =>
     window.matchMedia('(prefers-color-scheme: dark)').matches
   );
+  const [toggleCount, setToggleCount] = useState(0);
+  const [showBackground, setShowBackground] = useState(true);
   
   // Add a class to the body to prevent scrolling when sidebar is open
   useEffect(() => {
@@ -40,6 +42,24 @@ function App() {
       root.classList.remove('dark');
     }
   }, [dark]);
+  
+  // Handle toggle count and background visibility
+  const handleDarkModeToggle = (newDarkValue) => {
+    setDark(newDarkValue);
+    setToggleCount(prevCount => {
+      const newCount = prevCount + 1;
+      // After 2 clicks, disable background
+      if (newCount === 2) {
+        setShowBackground(false);
+      }
+      // On 3rd click, re-enable background and reset counter
+      else if (newCount === 3) {
+        setShowBackground(true);
+        return 0; // Reset counter
+      }
+      return newCount;
+    });
+  };
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 300);
@@ -91,11 +111,11 @@ function App() {
   return (
     <div className="relative min-h-screen flex flex-col">
       {/* Global 3D background that adapts to each section */}
-      <Background3D theme={dark ? 'dark' : 'light'} section={activeSection} />
+      {showBackground && <Background3D theme={dark ? 'dark' : 'light'} section={activeSection} />}
       
-      {/* Menu Button for mobile/tablet */}
+      {/* Menu Button for small and medium screens */}
       <button
-        className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/20 dark:bg-gray-800/80 hover:bg-secondary/30 dark:hover:bg-gray-700/80 transition transform lg:hidden shadow-md"
+        className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/20 dark:bg-gray-800/80 hover:bg-secondary/30 dark:hover:bg-gray-700/80 transition transform xl:hidden shadow-md"
         onClick={() => setSidebarOpen(true)}
         aria-label="Open menu"
       >
@@ -127,7 +147,7 @@ function App() {
 
       {/* Dark Mode Toggle */}
       <div className="fixed right-4 top-4 z-50">
-        <DarkModeToggle dark={dark} setDark={setDark} />
+        <DarkModeToggle dark={dark} setDark={handleDarkModeToggle} toggleCount={toggleCount} />
       </div>
     </div>
   );

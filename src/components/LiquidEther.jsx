@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 export default function LiquidEther({
-  mouseForce = 50,
-  cursorSize = 10,
+  mouseForce = 80,
+  cursorSize = 200,
   isViscous = false,
   viscous = 30,
   iterationsViscous = 32,
@@ -994,11 +994,8 @@ export default function LiquidEther({
         container.style.position = container.style.position || 'fixed';
         container.style.inset = container.style.inset || '0';
       }
-    } catch (e) {
-      // ignore DOM errors in some environments
-    }
+    } catch (e) {}
 
-  console.debug('[LiquidEther] initializing WebGLManager');
   const webgl = new WebGLManager({
       $wrapper: container,
       autoDemo,
@@ -1034,12 +1031,10 @@ export default function LiquidEther({
     applyOptionsFromProps();
 
   webgl.start();
-  console.debug('[LiquidEther] webgl started');
-    // WebGL initialization complete
+  
     let _statusEl = null;
     try {
       _statusEl = document.createElement('div');
-      _statusEl.textContent = 'WebGL OK';
       _statusEl.className = 'liquidether-status';
       container.appendChild(_statusEl);
     } catch (e) {
@@ -1176,8 +1171,8 @@ export default function LiquidEther({
   return (
     <div
       ref={mountRef}
-      className={`w-full h-full relative overflow-hidden pointer-events-none touch-none ${className || ''}`}
-      style={style}
+      className={`w-full h-full relative pointer-events-auto overflow-hidden ${className || ''}`}
+      style={{ touchAction: 'none', ...style }}
     />
   );
 }
