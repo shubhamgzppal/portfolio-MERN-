@@ -550,11 +550,11 @@ class Y extends c {
 }
 
 const X = {
-  count: 200,
-  colors: ['#5227FF', '#FF9FFC', '#B19EEF'],
+  count: 100,
+  colors: [0,0,0], 
   ambientColor: 16,
-  ambientIntensity: 1,
-  lightIntensity: 200,
+  ambientIntensity: 0.5,
+  lightIntensity: 50,
   materialParams: {
     metalness: 0.5,
     roughness: 0.5,
@@ -564,7 +564,7 @@ const X = {
   minSize: 0.5,
   maxSize: 1,
   size0: 1,
-  gravity: 0.5,
+  gravity: 0.01,
   friction: 0.9975,
   wallBounce: 0.95,
   maxVelocity: 0.15,
@@ -634,7 +634,7 @@ class Z extends d {
           this.light.color.copy(t.getColorAt(idx / this.count));
         }
       }
-      this.instanceColor.needsUpdate = true;
+      this.instanceColor.needsUpdate = false;
     }
   }
   update(e) {
@@ -736,8 +736,7 @@ function createBallpit(e, t = {}) {
   };
 }
 
-const Ballpit = ({ className = '', followCursor = true, ...props }) => {
-  followCursor = true;
+const Ballpit = ({ className = '', followCursor, ...props }) => {
   const canvasRef = useRef(null);
   const spheresInstanceRef = useRef(null);
 
@@ -763,7 +762,7 @@ const Ballpit = ({ className = '', followCursor = true, ...props }) => {
     }
 
     console.debug('[Ballpit] initializing');
-    spheresInstanceRef.current = createBallpit(canvas, { followCursor : true, ...props });
+    spheresInstanceRef.current = createBallpit(canvas, { followCursor, ...props });
 
     return () => {
       console.debug('[Ballpit] disposing');
@@ -771,7 +770,6 @@ const Ballpit = ({ className = '', followCursor = true, ...props }) => {
         spheresInstanceRef.current.dispose();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <canvas className={`${className} w-full h-full`} ref={canvasRef} />;

@@ -9,12 +9,12 @@ const Background3D = ({ theme, section = 'home' }) => {
   const mode = theme ?? (systemPrefersDark ? 'dark' : 'light');
   const isLight = mode === 'light';
 
-  const lightPalette = ['#ffe28a', '#ffd47a', '#ffb66b', '#ff9f6b', '#ff6b9f'];
-  const darkPalette = ['#2a0aff', '#5227FF', '#A36BFF', '#B19EEF', '#FF9FFC'];
-
+  // Define color palettes for light and dark modes
+  const lightPalette = ['#6d52d9', '#bfb8b4', '#f5f2f3'];
+  const darkPalette = ['#5227FF', '#FF9FFC', '#B19EEF'];
 
   return (
-    <div className="fixed inset-0 pointer-events-auto z-0" aria-hidden="true">
+    <div className="fixed inset-0 pointer-events-auto z-0 hidden lg:block" aria-hidden="true">
       <div className="w-full h-full" key={mode}>
         {isLight ? (
           <Ballpit
