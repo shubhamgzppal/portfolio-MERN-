@@ -23,12 +23,22 @@ export default function Education() {
     'Data Structures & Algorithms'
   ];
 
-  const achievements = [
-    'Strong Academic Performance',
-    'Core Subject Excellence',
-    'Academic Event Participation',
-    'Leadership Activities'
-  ];
+  const achievements = {
+    InterMediate: [
+      'Secured First Division with consistent performance across core subjects (PCM + English + Hindi)',
+      'Demonstrated strong foundation in Mathematics, Physics, and Chemistry',
+      'Achieved highest marks in Sports & Physical Education (74/100), reflecting all-round development',
+      'Actively participated in academic and cultural programs at school level',
+      'Balanced academics with extracurricular activities, building leadership and teamwork skills'
+    ],
+    HighSchool: [
+      'Achieved strong grades across core subjects, including English (85/100, Grade A2) and Social Science (82/100, Grade A2)',
+      'Demonstrated creativity and excellence in Drawing (86/100, Grade A2)',
+      'Consistently performed well in Mathematics and Science, building a strong foundation for higher studies',
+      'Earned Grade A in Moral, Sports & Physical Education, reflecting discipline and holistic growth',
+      'Balanced academics with extracurricular and cultural participation'
+    ]
+  };
 
   const getCertificatePDF = () => {
     switch (modal) {
@@ -39,7 +49,6 @@ export default function Education() {
     }
   };
 
-  // Prevent background scroll and trap focus in modal
   useEffect(() => {
     if (modal) {
       document.body.style.overflow = 'hidden';
@@ -125,14 +134,14 @@ export default function Education() {
                   institute={<span>Hindu Inter College Zamamnia R S Ghazipur</span>}
                   duration={<span>2017 - 2018</span>}
                   handleClick={() => setModal('intermediate')}
-                  items={achievements}
+                  items={achievements.InterMediate}
                 />
                 <EducationCard
                   title="High School"
                   institute={<span>S B V M H S S Zamamnia R S Ghazipur</span>}
                   duration={<span>2015 - 2016</span>}
                   handleClick={() => setModal('highschool')}
-                  items={achievements}
+                  items={achievements.HighSchool}
                 />
               </div>
             </motion.div>
