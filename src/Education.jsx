@@ -14,31 +14,39 @@ export default function Education() {
   const [modal, setModal] = useState(null);
   const modalRef = useRef(null);
 
-  const focusAreas = [
-    'Full Stack Web Development',
-    'Database Management Systems',
-    'Software Engineering Principles',
-    'Computer Networks',
-    'Operating Systems',
-    'Data Structures & Algorithms'
-  ];
+ const focusAreas = [
+  'Full Stack Web Development',
+  'Database Management Systems',
+  'Software Engineering Principles',
+  'Computer Networks',
+  'Operating Systems',
+  'Data Structures & Algorithms'
+];
 
-  const achievements = {
-    InterMediate: [
-      'Secured First Division with consistent performance across core subjects (PCM + English + Hindi)',
-      'Demonstrated strong foundation in Mathematics, Physics, and Chemistry',
-      'Achieved highest marks in Sports & Physical Education (74/100), reflecting all-round development',
-      'Actively participated in academic and cultural programs at school level',
-      'Balanced academics with extracurricular activities, building leadership and teamwork skills'
-    ],
-    HighSchool: [
-      'Achieved strong grades across core subjects, including English (85/100, Grade A2) and Social Science (82/100, Grade A2)',
-      'Demonstrated creativity and excellence in Drawing (86/100, Grade A2)',
-      'Consistently performed well in Mathematics and Science, building a strong foundation for higher studies',
-      'Earned Grade A in Moral, Sports & Physical Education, reflecting discipline and holistic growth',
-      'Balanced academics with extracurricular and cultural participation'
-    ]
-  };
+const achievements = {
+  Diploma: [
+    'Achieved First Division with strong academic performance (2311/3255)',
+    'Excelled in core IT subjects including Python, PHP, Cloud Computing, and Android Development',
+    'Scored 80/100 in Final Year Major Project, showcasing practical implementation of IT solutions',
+    'Earned full marks in Student-Centred Activities (30/30),',
+    'highlighting active participation in academic and professional growth programs',
+    'Gained hands-on experience through Industrial Training, Minor Projects, and applied coursework'
+  ],
+  InterMediate: [
+    'Secured First Division with consistent performance across core subjects (PCM + English + Hindi)',
+    'Demonstrated strong foundation in Mathematics, Physics, and Chemistry',
+    'Achieved highest marks in Sports & Physical Education (74/100), reflecting all-round development',
+    'Actively participated in academic and cultural programs at school level',
+    'Balanced academics with extracurricular activities, building leadership and teamwork skills'
+  ],
+  HighSchool: [
+    'Achieved strong grades across core subjects, including English (85/100, Grade A2) and Social Science (82/100, Grade A2)',
+    'Demonstrated creativity and excellence in Drawing (86/100, Grade A2)',
+    'Consistently performed well in Mathematics and Science, building a strong foundation for higher studies',
+    'Earned Grade A in Moral, Sports & Physical Education, reflecting discipline and holistic growth',
+    'Balanced academics with extracurricular and cultural participation'
+  ]
+};
 
   const getCertificatePDF = () => {
     switch (modal) {
@@ -126,22 +134,31 @@ export default function Education() {
                   institute={<span>Government Polytechnic College Ghaziabad</span>}
                   duration={<span>2022 - 2025</span>}
                   handleClick={() => setModal('diploma')}
-                  items={focusAreas}
-                  sectionTitle="Key Focus Areas"
+                  items={achievements.Diploma}
+                  sections={[
+                    {
+                      title: "Key Focus Areas",
+                      items: focusAreas
+                    },
+                    {
+                      title: "Achievements & Activities",
+                      items: achievements.Diploma
+                    }
+                  ]}
                 />
                 <EducationCard
                   title="Intermediate"
                   institute={<span>Hindu Inter College Zamamnia R S Ghazipur</span>}
                   duration={<span>2017 - 2018</span>}
                   handleClick={() => setModal('intermediate')}
-                  items={achievements.InterMediate}
+                  sections={[{ title: "Achievements & Activities", items: achievements.InterMediate }]}
                 />
                 <EducationCard
                   title="High School"
                   institute={<span>S B V M H S S Zamamnia R S Ghazipur</span>}
                   duration={<span>2015 - 2016</span>}
                   handleClick={() => setModal('highschool')}
-                  items={achievements.HighSchool}
+                  sections={[{ title: "Achievements & Activities", items: achievements.HighSchool }]}
                 />
               </div>
             </motion.div>

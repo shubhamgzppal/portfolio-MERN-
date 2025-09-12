@@ -5,8 +5,7 @@ export default function EducationCard({
   institute,
   duration,
   handleClick,
-  items,
-  sectionTitle = 'Achievements & Activities'
+  sections = []
 }) {
   return (
     <motion.div
@@ -42,19 +41,21 @@ export default function EducationCard({
         )}
       </div>
 
-      {/* Items List */}
-      {items && items.length > 0 && (
-        <div>
-          {sectionTitle && (
-            <h4 className="font-semibold mb-2 text-secondary">{sectionTitle}:</h4>
-          )}
-          <ul className="list-disc pl-5">
-            {items.map((item, idx) => (
-              <li key={idx} className="text-[0.9rem] text-gray-300 dark:text-gray-300">
-                {item}
-              </li>
-            ))}
-          </ul>
+      {/* Sections */}
+      {sections.length > 0 && (
+        <div className="space-y-4">
+          {sections.map((section, sIdx) => (
+            <div key={sIdx}>
+              {section.title && (
+                <h4 className="font-semibold mb-2 text-secondary">{section.title}:</h4>
+              )}
+              <ul className="list-disc pl-5">
+                {section.items.map((item, idx) => (
+                  <li key={idx} className="text-[0.9rem] text-gray-300 dark:text-gray-300">{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       )}
     </motion.div>
