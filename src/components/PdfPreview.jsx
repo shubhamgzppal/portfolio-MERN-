@@ -6,10 +6,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-pdfjs.disableWorker = false; 
-pdfjs.PDFJS = pdfjs.PDFJS || {};
-pdfjs.PDFJS.disableFontFace = true;
-
 export default function PdfPreview({ file, className = "" }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
