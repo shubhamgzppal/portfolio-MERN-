@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import PageTransition from './components/PageTransition';
 import { MotionContainer } from './components/MotionElements';
 import EducationCard from './components/EducationCard';
+import PdfPreview from './components/PdfPreview';
 
 import highSchoolCert from './assets/Shubham high school certificate.pdf';
 import intermediateCert from './assets/Shubham intermediate certificate.pdf';
@@ -14,14 +15,34 @@ export default function Education() {
   const [modal, setModal] = useState(null);
   const modalRef = useRef(null);
 
- const focusAreas = [
-  'Full Stack Web Development',
-  'Database Management Systems',
-  'Software Engineering Principles',
-  'Computer Networks',
-  'Operating Systems',
-  'Data Structures & Algorithms'
-];
+ const focusAreas = {
+  DiplomaFocus : [
+    'Full Stack Web Development',
+    'Database Management Systems',
+    'Software Engineering Principles',
+    'Computer Networks',
+    'Operating Systems',
+    'Data Structures & Algorithms'
+  ],
+  highSchoolFocus : [
+    'Mathematics',
+    'Science (Physics, Chemistry, Biology)',
+    'English Language & Literature',
+    'Social Science (History, Civics, Geography, Economics)',
+    'Hindi',
+    'Drawing & Creative Arts',
+    'Moral Science & Physical Education'
+  ],
+  intermediateFocus : [
+    'Physics',
+    'Chemistry',
+    'Mathematics',
+    'English',
+    'Hindi',
+    'Sports & Physical Education',
+    'Cultural & Academic Activities'
+  ]
+}
 
 const achievements = {
   Diploma: [
@@ -77,48 +98,20 @@ const achievements = {
   return (
     <PageTransition>
       {modal && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black/60"
-          onClick={() => setModal(null)}
-          aria-modal="true"
-          role="dialog"
-        >
-          <div
-            ref={modalRef}
-            tabIndex={-1}
-            className="bg-white dark:bg-black-100 rounded-lg shadow-lg p-4 max-w-2xl w-full relative flex flex-col items-center z-50 modal-content"
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-2 right-2 text-xl text-gray-300 hover:text-secondary"
-              onClick={() => setModal(null)}
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
-            {getCertificatePDF() ? (
-              <object
-                data={getCertificatePDF()}
-                type="application/pdf"
-                className="w-full h-[70vh] rounded border"
-                aria-label="Certificate PDF"
-                loading="lazy"
-              >
-                <p className="text-center">Unable to display PDF. <a href={getCertificatePDF()} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Click here to download.</a></p>
-              </object>
-            ) : (
-              <p className="text-center">No certificate available.</p>
-            )}
+        <div className="fixed inset-0 flex z-10 mt-12 items-center justify-center bg-black/60" onClick={() => setModal(null)}>
+          <div ref={modalRef} className="overflow-auto" onClick={e => e.stopPropagation()}>
+            <button className="absolute top-4 right-4 z-1 md:hidden text-white" onClick={() => setModal(null)}>Close</button>
+            <PdfPreview file={getCertificatePDF()} className="rounded border" />
           </div>
         </div>
       )}
 
-      <section className="bg-transparent dark:bg-transparent text-white-100 dark:text-white-100 items-center section-py" id="education">
+      <section className="bg-transparent dark:bg-transparent text-white items-center section-py" id="education">
         <MotionContainer>
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-6xl mx-auto text-center">
             <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
               <h2 className="text-3xl md:text-4xl font-bold mb-6 wavy-underline drop-shadow-lg">Education</h2>
-              <p className="mb-8 font-semibold drop-shadow">My academic journey and qualifications.</p>
+              <p className="mb-8 text-white font-semibold drop-shadow">My academic journey and qualifications.</p>
             </motion.div>
 
             <motion.div
@@ -135,30 +128,21 @@ const achievements = {
                   duration={<span>2022 - 2025</span>}
                   handleClick={() => setModal('diploma')}
                   items={achievements.Diploma}
-                  sections={[
-                    {
-                      title: "Key Focus Areas",
-                      items: focusAreas
-                    },
-                    {
-                      title: "Achievements & Activities",
-                      items: achievements.Diploma
-                    }
-                  ]}
+                  sections={[{title: "Key Focus Areas", items: focusAreas.DiplomaFocus},{title: "Achievements & Activities", items: achievements.Diploma}]}
                 />
                 <EducationCard
                   title="Intermediate"
                   institute={<span>Hindu Inter College Zamamnia R S Ghazipur</span>}
                   duration={<span>2017 - 2018</span>}
                   handleClick={() => setModal('intermediate')}
-                  sections={[{ title: "Achievements & Activities", items: achievements.InterMediate }]}
+                  sections={[{title: "Key Focus Areas", items: focusAreas.intermediateFocus},{ title: "Achievements & Activities", items: achievements.InterMediate }]}
                 />
                 <EducationCard
                   title="High School"
                   institute={<span>S B V M H S S Zamamnia R S Ghazipur</span>}
                   duration={<span>2015 - 2016</span>}
                   handleClick={() => setModal('highschool')}
-                  sections={[{ title: "Achievements & Activities", items: achievements.HighSchool }]}
+                  sections={[{title: "Key Focus Areas", items: focusAreas.highSchoolFocus},{ title: "Achievements & Activities", items: achievements.HighSchool }]}
                 />
               </div>
             </motion.div>

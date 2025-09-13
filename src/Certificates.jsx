@@ -1,10 +1,14 @@
+'use client';
 import PageTransition from './components/PageTransition';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 
-import WebdegineCert from './assets/MSME WEB degsine certificate.pdf';
-import CoreJavaCert from './assets/Core Java Training - Certificate of Completion (2).pdf';
-import OLevelCert from './assets/Shubham pal o level certificate.pdf';
-import PythonForDataScience from './assets/Shubham Pal Python 101 for Data Science (IBM) certificate.pdf';
+import WebdegineCert from './assets/MSME WEB degsine certificate.pdf?url';
+import CoreJavaCert from './assets/Core Java Training Certificate of Completion.pdf?url';
+import OLevelCert from './assets/Shubham pal o level certificate.pdf?url';
+import PythonForDataScience from './assets/Shubham Pal Python 101 for Data Science (IBM) certificate.pdf?url';
+import FoundationsOfAI from './assets/Shubham pal Foundations of AI (Microsoft) certificate.pdf?url';
+
+const PdfPreview = lazy(() => import('./components/PdfPreview'));
 
 const certificatesData = {
   FULL_STACK: [
@@ -14,7 +18,7 @@ const certificatesData = {
       icon: "MSME",
       url: WebdegineCert,
       date: "10 Oct 2024",
-      skills: ["HTML", "CSS", "JavaScript", "wordpress", "Bootstrap", "Responsive Design", "Web Development Fundamentals", "UI/UX Principles", "Web Accessibility", "Web Hosting and Deployment", "Web Design Tools"]
+      skills: ["HTML", "CSS", "JavaScript", "WordPress", "Bootstrap", "Responsive Design", "Web Development Fundamentals", "UI/UX Principles", "Web Accessibility", "Web Hosting and Deployment", "Web Design Tools"]
     },
     {
       title: "Core Java",
@@ -35,11 +39,19 @@ const certificatesData = {
   ],
   DATA_SCIENCE: [
     {
+      title: "Foundations of AI",
+      provider: "Microsoft, Edunet Foundation, AICTE",
+      icon: "Microsoft",
+      url: FoundationsOfAI,
+      date: "10 May 2025",
+      skills: ["Artificial Intelligence", "Machine Learning Basics", "AI Ethics", "Data Analysis", "Python Programming", "Problem Solving with AI", "Foundational AI Concepts", "AI Applications", "AI Tools and Platforms"]
+    },
+    {
       title: "Python 101 for Data Science",
       provider: "IBM",
       icon: "📊",
       url: PythonForDataScience,
-      date: "16 Auguest 2025",
+      date: "16 August 2025",
       skills: ["Python", "Data Analysis", "Data Visualization", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn"]
     }
   ]
@@ -50,17 +62,16 @@ export default function Certificates() {
   const [modal, setModal] = useState(null);
   const modalRef = useRef(null);
 
-  // Prevent background scroll and trap focus in modal
   useEffect(() => {
     if (modal) {
       document.body.style.overflow = 'hidden';
-      if (modalRef.current) {
-        modalRef.current.focus();
-      }
+      if (modalRef.current) modalRef.current.focus();
+
       const handleKeyDown = (e) => {
         if (e.key === 'Escape') setModal(null);
       };
       window.addEventListener('keydown', handleKeyDown);
+
       return () => {
         document.body.style.overflow = '';
         window.removeEventListener('keydown', handleKeyDown);
@@ -68,42 +79,33 @@ export default function Certificates() {
     }
   }, [modal]);
 
+  const handleMouseMove = (e, card) => {
+    cancelAnimationFrame(card._frame);
+    card._frame = requestAnimationFrame(() => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * 8;
+      const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * -8;
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+  };
+
   return (
     <PageTransition>
       {modal && (
-        <div
-          className="fixed inset-0 z-10 flex items-center justify-center bg-black/60"
-          onClick={() => setModal(null)}
-          aria-modal="true"
-          role="dialog"
-        >
-          <div
-            ref={modalRef}
-            tabIndex={-1}
-            className="bg-white dark:bg-black-100 rounded-lg shadow-lg p-4 max-w-2xl w-full relative flex flex-col items-center z-50 modal-content"
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-2 right-2 text-xl text-gray-300 hover:text-secondary"
-              onClick={() => setModal(null)}
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
-            <object
-              data={modal}
-              type="application/pdf"
-              className="w-full h-[70vh] rounded border"
-              aria-label="Certificate PDF"
-              loading="lazy"
-            >
-              <p className="text-center">Unable to display PDF. <a href={modal} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Click here to download.</a></p>
-            </object>
+        <div className="fixed inset-0 z-10 mt-20 flex items-center justify-center bg-black/60" onClick={() => setModal(null)}>
+          <div ref={modalRef} onClick={e => e.stopPropagation()} className='overflow-auto'>
+            <button className='absolute top-4 right-4 z-1 md:hidden text-white' onClick={() => setModal(null)}>Close</button>
+            <Suspense fallback={<div className="text-center">Loading PDF...</div>}>
+              <PdfPreview file={modal} className="rounded border" />
+            </Suspense>
           </div>
         </div>
       )}
-      <section className="bg-transparent dark:bg-transparent text-white-100 dark:text-white-100 py-20 md:py-32" id="certificates">
-        <div className="max-w-4xl mx-auto px-4">
+
+      <section className="bg-transparent dark:bg-transparent text-white py-20" id="certificates">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 wavy-underline drop-shadow-lg">Certificates</h2>
             <p className="text-gray-300 dark:text-gray-300 font-semibold drop-shadow">
@@ -111,34 +113,14 @@ export default function Certificates() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6"
-            style={{
-              perspective: '1000px',
-              perspectiveOrigin: '50% 50%'
-            }}
-          >
+          <div className="grid md:grid-cols-2 gap-6" style={{ perspective: '1000px', perspectiveOrigin: '50% 50%' }}>
             {certificates.map((cert, index) => (
-              <div 
+              <div
                 key={index}
-                className="glass bg-white/10 dark:bg-primary/20 rounded-lg p-6 shadow-xl border border-secondary/10 backdrop-blur-sm hover:transform-gpu hover:scale-105 transition-all duration-300 hover:shadow-2xl font-semibold drop-shadow"
-                style={{
-                  transformStyle: 'preserve-3d',
-                  boxShadow: '0 12px 32px rgba(0,0,0,0.18), 0 1.5px 8px rgba(0,0,0,0.10)'
-                }}
-                onMouseMove={e => {
-                  const card = e.currentTarget;
-                  const rect = card.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  const centerX = rect.width / 2;
-                  const centerY = rect.height / 2;
-                  const rotateX = ((y - centerY) / centerY) * 8;
-                  const rotateY = ((x - centerX) / centerX) * -8;
-                  card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = '';
-                }}
+                className="glass bg-white/10 dark:bg-primary/20 rounded-lg p-6 shadow-xl border border-secondary/10 backdrop-blur-sm hover:shadow-2xl font-semibold drop-shadow transition-all duration-300"
+                style={{ transformStyle: 'preserve-3d', boxShadow: '0 12px 32px rgba(0,0,0,0.18), 0 1.5px 8px rgba(0,0,0,0.10)' }}
+                onMouseMove={e => handleMouseMove(e, e.currentTarget)}
+                onMouseLeave={e => (e.currentTarget.style.transform = '')}
               >
                 <div className="flex items-start gap-4">
                   <span className="text-3xl pulse">{cert.icon}</span>
@@ -150,9 +132,9 @@ export default function Certificates() {
                     <p className="text-gray-300 dark:text-gray-300 text-sm mb-3 font-semibold drop-shadow">{cert.provider}</p>
                     <div className="flex flex-wrap gap-2 mb-3">
                       {cert.skills.map((skill, skillIndex) => (
-                        <span 
+                        <span
                           key={skillIndex}
-                          className="px-2 py-1 text-xs rounded-full bg-secondary/10 text-secondary font-semibold drop-shadow"
+                          className="px-2 py-1 text-xs rounded-full bg-secondary/10 text-secondary font-semibold drop-shadow transition-transform hover:scale-105"
                         >
                           {skill}
                         </span>

@@ -53,14 +53,14 @@ export default function Contact() {
   
   return (
     <PageTransition>
-      <section className="bg-transparent dark:bg-transparent text-white-100 dark:text-white-100 items-center py-16 px-4" id="contact">
+      <section className="bg-transparent dark:bg-transparent text-white-100 dark:text-white-100 items-center py-20 px-4" id="contact">
         <MotionContainer>
           <div className="max-w-4xl mx-auto z-10">
             <div className="text-center mb-12">
               <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 1, delay: 0.1 }}
               >
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 wavy-underline drop-shadow-lg">Get in Touch</h2>
                 <p className="text-gray-100 dark:text-gray-300 max-w-2xl mx-auto font-semibold drop-shadow">Have a question or want to work together? Feel free to reach out!</p>

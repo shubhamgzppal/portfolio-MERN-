@@ -72,7 +72,7 @@ export default function Projects() {
     <PageTransition>
       <section className="bg-transparent dark:bg-transparent text-white-100 dark:text-white-100 items-center py-20 px-5" id="projects">
         <MotionContainer>
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <motion.div 
               className="text-center mb-12"
               initial={{ y: -20, opacity: 0 }}
@@ -80,7 +80,7 @@ export default function Projects() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4 wavy-underline drop-shadow-lg">Projects</h2>
-              <p className="text-gray-300 dark:text-gray-300 font-semibold drop-shadow mb-2">
+              <p className="text-white font-semibold drop-shadow mb-2">
                 Featured projects that showcase my Full Stack and Data Science work
               </p>
             </motion.div>
@@ -90,7 +90,7 @@ export default function Projects() {
               variants={container}
               initial="hidden"
               animate={inView ? "show" : "hidden"}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid md:grid-cols-2 gap-8"
               style={{
                 perspective: '1200px',
                 perspectiveOrigin: '50% 50%',

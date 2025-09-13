@@ -7,8 +7,8 @@ const PageTransition = ({ children }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ 
-        duration: 0.5, 
-        ease: [0.43, 0.13, 0.23, 0.96] // Custom easing for smoother animation
+        duration: 1, 
+        ease: [0.43, 0.13, 0.23, 0.96]
       }}
       className="w-full z-1"
     >
