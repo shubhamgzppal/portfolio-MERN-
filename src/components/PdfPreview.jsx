@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
+// Use Vite's ?url import so workerUrl is a string the pdf.js runtime accepts
+pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
 export default function PdfPreview({ file, className = "" }) {
   const [numPages, setNumPages] = useState(null);
