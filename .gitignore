@@ -1,0 +1,21 @@
+# Ignore dependencies and environment files
+node_modules
+.env
+package-lock.json
+
+# If a file was already committed, .gitignore won't untrack it.
+# To check whether a path is ignored and which rule matched:
+#   git check-ignore -v path/to/file
+#
+# To stop tracking an already committed file but keep your local copy:
+#   git rm --cached path/to/file
+# then:
+#   git add . && git commit -m "Stop tracking <path/to/file>"
+#
+# To untrack everything that should be ignored (rebuild the index):
+#   git rm -r --cached .
+#   git add .
+#   git commit -m "Stop tracking ignored files"
+#
+# For a one-off local-only ignore (not committed):
+#   git update-index --assume-unchanged path/to/file

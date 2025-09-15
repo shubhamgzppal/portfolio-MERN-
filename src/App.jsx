@@ -11,9 +11,11 @@ import Navbar from './Navbar';
 import DarkModeToggle from './DarkModeToggle';
 import Background3D from './components/Background3D';
 import { useState, useEffect } from 'react';
+import Chatbot from './components/Chatbot';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [dark, setDark] = useState(() =>
@@ -22,7 +24,6 @@ function App() {
   const [toggleCount, setToggleCount] = useState(0);
   const [showBackground, setShowBackground] = useState(true);
   
-  // Add a class to the body to prevent scrolling when sidebar is open
   useEffect(() => {
     if (sidebarOpen) {
       document.body.style.overflow = 'hidden';
@@ -42,20 +43,17 @@ function App() {
       root.classList.remove('dark');
     }
   }, [dark]);
-  
-  // Handle toggle count and background visibility
+
   const handleDarkModeToggle = (newDarkValue) => {
     setDark(newDarkValue);
     setToggleCount(prevCount => {
       const newCount = prevCount + 1;
-      // After 2 clicks, disable background
       if (newCount === 2) {
         setShowBackground(false);
       }
-      // On 3rd click, re-enable background and reset counter
       else if (newCount === 3) {
         setShowBackground(true);
-        return 0; // Reset counter
+        return 0;
       }
       return newCount;
     });
@@ -86,7 +84,6 @@ function App() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [sidebarOpen]);
 
-  // Function to render the active section
   const renderActiveSection = () => {
     switch (activeSection) {
       case 'home':
@@ -110,16 +107,13 @@ function App() {
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      {/* Global 3D background that adapts to each section */}
       {showBackground && <Background3D theme={dark ? 'dark' : 'light'} section={activeSection} />}
       
-      {/* Menu Button for small and medium screens */}
       <button
         className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/20 dark:bg-gray-800/80 hover:bg-secondary/30 dark:hover:bg-gray-700/80 transition transform xl:hidden shadow-md"
         onClick={() => setSidebarOpen(true)}
         aria-label="Open menu"
       >
-        {/* Hamburger Icon */}
         <svg className="w-7 h-7 text-secondary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
@@ -134,18 +128,10 @@ function App() {
 
       <Footer />
 
-      {/* Back to Top Button */}
-      {showTop && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed right-4 bottom-32 z-50 p-2 rounded-full bg-white dark:bg-primary/40 shadow-xl border border-secondary/10 backdrop-blur-sm transition-all duration-300 hover:scale-110"
-          title="Back to Top"
-        >
-          <div className="w-10 h-10 flex items-center justify-center text-2xl">⬆️</div>
-        </button>
-      )}
+      <div className="fixed right-4 bottom-6 z-50 flex flex-col items-end">
+       <Chatbot onClick={() => setChatOpen(!chatOpen)} isOpen={chatOpen} />
+      </div>
 
-      {/* Dark Mode Toggle */}
       <div className="fixed right-4 top-4 z-50 hidden lg:block">
         <DarkModeToggle dark={dark} setDark={handleDarkModeToggle} toggleCount={toggleCount} />
       </div>

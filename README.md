@@ -42,7 +42,7 @@ A modern, responsive portfolio website built with the MERN stack (MongoDB, Expre
 
 3. Run the development server:
    ```bash
-   npm run dev
+   npm run server
    ```
 
 4. Open https://shubhamgzppal.netlify.app/ to view the website

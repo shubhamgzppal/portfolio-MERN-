@@ -6,7 +6,7 @@ import RotatingText from './components/RotatingText';
 import TextType from './components/TextType';
 
   const handleAnimationComplete = () => {
-    // Animation complete
+  
   };
 
 export default function Hero() {
