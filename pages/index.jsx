@@ -12,7 +12,6 @@ import Resume from './Resume.jsx'
 import Footer from '../components/Footer.jsx'
 import Sidebar from '../components/sidebar.jsx'
 import Navbar from '../components/Navbar.jsx'
-import DarkModeToggle from '../components/DarkModeToggle.jsx'
 import Background3D from '../components/Background3D.jsx'
 import Chatbot from '../components/Chatbot.jsx'
 
@@ -21,11 +20,15 @@ function App() {
   const [chatOpen, setChatOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [dark, setDark] = useState(() =>
-    typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
-  );
-  const [toggleCount, setToggleCount] = useState(0);
+  const [dark, setDark] = useState(false); 
   const [showBackground, setShowBackground] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setDark(prefersDark);
+    }
+  }, []);
 
   useEffect(() => {
     if (sidebarOpen) {
@@ -48,21 +51,6 @@ function App() {
     }
   }, [dark]);
 
-  const handleDarkModeToggle = (newDarkValue) => {
-    setDark(newDarkValue);
-    setToggleCount(prevCount => {
-      const newCount = prevCount + 1;
-      if (newCount === 2) {
-        setShowBackground(false);
-      }
-      else if (newCount === 3) {
-        setShowBackground(true);
-        return 0;
-      }
-      return newCount;
-    });
-  };
-
   useEffect(() => {
     const onScroll = () => setShowTop(typeof window !== 'undefined' ? window.scrollY > 300 : false);
     if (typeof window !== 'undefined') {
@@ -73,15 +61,19 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = typeof window !== 'undefined' ? (window.location.hash.slice(1) || 'home') : 'home';
+      const hash = window.location.hash.slice(1) || 'home';
       setActiveSection(hash);
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     };
-    if (typeof window !== 'undefined') {
-      window.addEventListener('hashchange', handleHashChange);
-      handleHashChange();
-      return () => window.removeEventListener('hashchange', handleHashChange);
-    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // run once on mount
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
 
   useEffect(() => {
     if (!sidebarOpen) return;
@@ -127,7 +119,8 @@ function App() {
         </svg>
       </button>
       
-      <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} activeSection={activeSection} />
+      <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} activeSection={activeSection} dark={dark} setDark={setDark} showBackground={showBackground} setShowBackground={setShowBackground} />
+
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <main className="flex-grow">
@@ -140,9 +133,6 @@ function App() {
        <Chatbot onClick={() => setChatOpen(!chatOpen)} isOpen={chatOpen} />
       </div>
 
-      <div className="fixed right-4 top-4 z-50 hidden lg:block">
-        <DarkModeToggle dark={dark} setDark={handleDarkModeToggle} toggleCount={toggleCount} />
-      </div>
     </div>
   );
 }
