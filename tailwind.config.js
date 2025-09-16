@@ -1,12 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   darkMode: 'class',
   future: { hoverOnlyWhenSupported: true },
   content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}",
+    './index.html',
+  // removed './src' backup files - using in-repo `components/` and `pages/`
+    './pages/**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
   ],
-  theme: {    extend: {
+  theme: { extend: {
       colors: {
         primary: "#050816",
         secondary: "#ffffff",
