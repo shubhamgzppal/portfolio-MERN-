@@ -21,6 +21,7 @@
     "@react-three/fiber": "^8.15.16",
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.2",
+    "formidable": "^3.5.4",
     "framer-motion": "^11.0.5",
     "gsap": "^3.13.0",
     "mongoose": "^8.4.4",
