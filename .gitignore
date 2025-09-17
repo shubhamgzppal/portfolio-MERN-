@@ -1,8 +1,46 @@
 # Ignore dependencies and environment files
-node_modules
-.env
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 package-lock.json
-.next
+
+# === Next.js ===
+.next/
+out/
+.vercel/
+dist/
+*.log
+
+# === Environment Variables ===
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+
+# === IDE / Editor ===
+.vscode/
+.idea/
+*.swp
+
+# === Testing ===
+coverage/
+jest-test-results.json
+
+# === Build Artifacts ===
+*.tgz
+
+# === Misc ===
+*.pem
+*.key
+*.crt
 
 # If a file was already committed, .gitignore won't untrack it.
 # To check whether a path is ignored and which rule matched:

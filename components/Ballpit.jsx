@@ -254,10 +254,10 @@ function S(e) {
         document.body.addEventListener('pointerleave', L);
         document.body.addEventListener('click', C);
 
-        document.body.addEventListener('touchstart', TouchStart, { passive: false });
-        document.body.addEventListener('touchmove', TouchMove, { passive: false });
-        document.body.addEventListener('touchend', TouchEnd, { passive: false });
-        document.body.addEventListener('touchcancel', TouchEnd, { passive: false });
+        document.body.addEventListener('touchstart', TouchStart, { passive: true });
+        document.body.addEventListener('touchmove', TouchMove, { passive: true });
+        document.body.addEventListener('touchend', TouchEnd, { passive: true });
+        document.body.addEventListener('touchcancel', TouchEnd, { passive: true });
 
         R = true;
       }
@@ -326,7 +326,6 @@ function L() {
 
 function TouchStart(e) {
   if (e.touches.length > 0) {
-    e.preventDefault();
     A.x = e.touches[0].clientX;
     A.y = e.touches[0].clientY;
 
@@ -347,7 +346,6 @@ function TouchStart(e) {
 
 function TouchMove(e) {
   if (e.touches.length > 0) {
-    e.preventDefault();
     A.x = e.touches[0].clientX;
     A.y = e.touches[0].clientY;
 
@@ -612,7 +610,6 @@ class Z extends d {
         return {
           setColors,
           getColorAt: function (ratio, out = new l()) {
-            // Start from second color to avoid using size0 color
             const scaled = Math.max(0, Math.min(1, ratio)) * (t.length - 2) + 1;
             const idx = Math.floor(scaled);
             const start = i[idx];
@@ -627,10 +624,8 @@ class Z extends d {
         };
       })(e);
       for (let idx = 0; idx < this.count; idx++) {
-        // Skip first color (size0 color) for all balls
         this.setColorAt(idx, t.getColorAt((idx + 1) / this.count));
         if (idx === 0) {
-          // Use second color for light instead of first
           this.light.color.copy(t.getColorAt(1));
         }
       }
@@ -667,13 +662,11 @@ function createBallpit(e, t = {}) {
   i.cameraMaxAspect = 1.5;
   i.resize();
   initialize(t);
-  // apply background color if provided
   try {
     if (t.bgColor) {
       try {
         i.renderer.setClearColor(new l(t.bgColor), 1);
       } catch (err) {
-        // ignore if color parse fails
       }
       if (e && e.parentNode) e.parentNode.style.background = t.bgColor;
       else if (e) e.style.background = t.bgColor;
@@ -743,8 +736,6 @@ const Ballpit = ({ className = '', followCursor, ...props }) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
-    // defensive sizing: ensure parent/ canvas has a non-zero rect so renderer can size
     try {
       const parent = canvas.parentNode;
       const rect = parent && parent.getBoundingClientRect && parent.getBoundingClientRect();
@@ -758,7 +749,6 @@ const Ballpit = ({ className = '', followCursor, ...props }) => {
         canvas.style.height = '100vh';
       }
     } catch (e) {
-      // ignore
     }
 
     console.debug('[Ballpit] initializing');

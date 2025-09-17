@@ -1,10 +1,9 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: 'class',
   future: { hoverOnlyWhenSupported: true },
   content: [
     './index.html',
-  // removed './src' backup files - using in-repo `components/` and `pages/`
     './pages/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
   ],

@@ -1,7 +1,27 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import DarkModeToggle from '../components/DarkModeToggle.jsx'
 
-export default function Sidebar({ open, onClose, theme = "dark" }) {
+export default function Sidebar({ open, onClose, theme = "dark", dark, setDark, showBackground, setShowBackground }) {
   const sidebarRef = useRef();
+  const [toggleCount, setToggleCount] = useState(0);
+  const prevDarkRef = useRef(dark);
+  
+  useEffect(() => {
+    if (dark !== undefined && dark !== prevDarkRef.current) {
+      prevDarkRef.current = dark;
+      
+      setToggleCount((prevCount) => {
+        const newCount = prevCount + 1;
+        if (newCount === 2) {
+          setShowBackground(false);
+        } else if (newCount === 3) {
+          setShowBackground(true);
+          return 0;
+        }
+        return newCount;
+      });
+    }
+  }, [dark, setShowBackground]);
 
   useEffect(() => {
     function handleClick(e) {
@@ -56,7 +76,13 @@ export default function Sidebar({ open, onClose, theme = "dark" }) {
           <a className={textClass + " text-lg"} href="#resume">Resume</a>
           <a className={textClass + " text-lg"} href="#contact">Contact</a>
         </nav>
-        
+
+        <div className="border border-white/10 rounded-full cursor-pointer item-center">
+          <div className="flex items-center text-lg px-2 gap-2">
+            Change-<DarkModeToggle dark={dark} setDark={setDark} />
+          </div>
+        </div>
+    
         {/* Social Links */}
           <div className="flex items-center gap-4">
             <a

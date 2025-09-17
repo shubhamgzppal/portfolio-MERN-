@@ -103,7 +103,7 @@ const achievements = {
         <div className="fixed inset-0 flex z-10 mt-12 items-center justify-center bg-black/60" onClick={() => setModal(null)}>
           <div ref={modalRef} className="overflow-auto" onClick={e => e.stopPropagation()}>
             <button className="absolute top-4 right-4 z-1 md:hidden text-white" onClick={() => setModal(null)}>Close</button>
-            <PdfPreview file={getCertificatePDF()} className="rounded border" />
+            <PdfPreview file={getCertificatePDF()} className="rounded border w-[600px]" />
           </div>
         </div>
       )}

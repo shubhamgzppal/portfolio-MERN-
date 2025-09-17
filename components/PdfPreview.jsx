@@ -34,7 +34,7 @@ export default function PdfPreview({ file, className = "" }) {
   const pageWidth = containerWidth ? Math.min(Math.max(containerWidth - 32, 200), 900) : undefined;
 
   return (
-    <div className={`w-[600px] items-center justify-center ${className}`}>
+    <div className={`items-center justify-center ${className}`}>
       <div
         ref={containerRef}
         className="overflow-auto flex justify-center items-start"

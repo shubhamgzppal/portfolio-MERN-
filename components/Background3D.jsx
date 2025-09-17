@@ -12,7 +12,7 @@ const Background3D = ({ theme, section = 'home' }) => {
   const darkPalette = ['#5227FF', '#FF9FFC', '#B19EEF'];
 
   return (
-    <div className="fixed inset-0 pointer-events-auto z-0 hidden lg:block" aria-hidden="true">
+    <div className="fixed inset-0 pointer-events-auto z-0" aria-hidden="true">
       <div className="w-full h-full" key={mode}>
         {isLight ? (
           <Ballpit

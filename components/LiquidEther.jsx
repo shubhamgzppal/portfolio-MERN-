@@ -1171,7 +1171,7 @@ export default function LiquidEther({
     <div
       ref={mountRef}
       className={`w-full h-full relative pointer-events-auto overflow-hidden ${className || ''}`}
-      style={{ touchAction: 'none', ...style }}
+      style={{ touchAction: 'pan-y', ...style }}
     />
   );
 }

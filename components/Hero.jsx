@@ -34,12 +34,12 @@ export default function Hero() {
             />
               <RotatingText
                 texts={["FULL STACK DEVELEOPER", "DATA SCIENTIST"]}
-                mainClassName="text-xl md:text-2xl font-semibold drop-shadow-md mb-2"
+                mainClassName="text-xl md:text-2xl font-bold drop-shadow-md mb-2"
                 rotationInterval={3200}
                 initial={{ y: '100%' }}
                 animate={{ y: 0 }}
                 exit={{ y: '-120%' }}
-                transition={{ type: 'spring', damping: 30, stiffness: 400 }}
+                transition={{ type: 'spring', damping: 80, stiffness: 600 }}
               />
             
             <motion.p 

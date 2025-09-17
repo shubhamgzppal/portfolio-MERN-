@@ -60,19 +60,22 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.slice(1) || 'home';
-      setActiveSection(hash);
+  const handleHashChange = () => {
+    const hash = window.location.hash.slice(1) || 'home';
+    setActiveSection(hash);
+    setTimeout(() => {
       const element = document.getElementById(hash);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
-    };
+    }, 100);
+  };
 
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // run once on mount
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  window.addEventListener('hashchange', handleHashChange);
+  handleHashChange();
+  return () => window.removeEventListener('hashchange', handleHashChange);
+}, []);
+
 
 
   useEffect(() => {
@@ -113,6 +116,7 @@ function App() {
         className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/20 dark:bg-gray-800/80 hover:bg-secondary/30 dark:hover:bg-gray-700/80 transition transform xl:hidden shadow-md"
         onClick={() => setSidebarOpen(true)}
         aria-label="Open menu"
+        style={{ backdropFilter: 'blur(10px)', pointerEvents:"auto" }}
       >
         <svg className="w-7 h-7 text-secondary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -121,7 +125,7 @@ function App() {
       
       <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} activeSection={activeSection} dark={dark} setDark={setDark} showBackground={showBackground} setShowBackground={setShowBackground} />
 
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} dark={dark} setDark={setDark} showBackground={showBackground} setShowBackground={setShowBackground} />
       
       <main className="flex-grow">
         {renderActiveSection()}

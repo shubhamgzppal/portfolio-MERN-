@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 // PDF assets now served from public/assets - reference via URL
 const WebdegineCert = '/assets/MSME WEB degsine certificate.pdf';
-const CoreJavaCert = '/assets/Core Java Training Certificate of Completion.pdf';
+const CoreJavaCert = '/assets/Shubham Pal Core Java Training Certificate.pdf';
 const OLevelCert = '/assets/Shubham pal o level certificate.pdf';
 const PythonForDataScience = '/assets/Shubham Pal Python 101 for Data Science (IBM) certificate.pdf';
 const FoundationsOfAI = '/assets/Shubham pal Foundations of AI (Microsoft) certificate.pdf';
@@ -100,7 +100,7 @@ export default function Certificates() {
           <div ref={modalRef} onClick={e => e.stopPropagation()} className='overflow-auto'>
             <button className='absolute top-4 right-4 z-1 md:hidden text-white' onClick={() => setModal(null)}>Close</button>
             <Suspense fallback={<div className="text-center">Loading PDF...</div>}>
-              <PdfPreview file={modal} className="rounded border" />
+              <PdfPreview file={modal} className="rounded border w-[600px]" />
             </Suspense>
           </div>
         </div>

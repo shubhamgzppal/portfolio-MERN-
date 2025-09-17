@@ -16,7 +16,7 @@ export default function Resume() {
 
           <div className="bg-white/10 dark:bg-black/20 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-secondary/10 relative z-2">
             
-            <PdfPreview file={RESUME_FILE} className='h-[80vh]' />
+            <PdfPreview file={RESUME_FILE} className='' />
                         
             <div className="pb-2 text-center text-sm text-gray-300">
               If the preview does not display, <a href={RESUME_FILE} download className="text-secondary underline">click here to download the PDF</a>.
