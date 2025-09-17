@@ -4,18 +4,34 @@ import { motion } from 'framer-motion';
 import SplitText from './SplitText.jsx';
 import RotatingText from './RotatingText.jsx';
 import TextType from './TextType.jsx';
+import LogoLoop from './LogoLoop.jsx';
+import { SiReact, SiNodedotjs, SiExpress, SiMongodb, SiJavascript, SiTailwindcss, SiGit, SiPython, SiTensorflow, SiMysql, SiPandas, SiNumpy, SiScikitlearn } from 'react-icons/si';
 
-  const handleAnimationComplete = () => {
-  
-  };
+  const techLogos = [
+  { node: <SiReact />, title: "React.js", href: "https://react.dev" },
+  { node: <SiNodedotjs />, title: "Node.js", href: "https://nodejs.org" },
+  { node: <SiExpress />, title: "Express.js", href: "https://expressjs.com" },
+  { node: <SiMongodb />, title: "MongoDB", href: "https://www.mongodb.com/" },
+  { node: <SiJavascript />, title: "JavaScript", href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiGit />, title: "Git", href: "https://git-scm.com/" },
+  { node: <SiPython />, title: "Python", href: "https://www.python.org/" },
+  { node: <SiTensorflow />, title: "Machine Learning", href: "https://www.tensorflow.org/" },
+  { node: <SiPython />, title: "Data Analysis", href: "https://www.python.org/" },
+  { node: <SiMysql />, title: "SQL", href: "https://www.mysql.com/" },
+  { node: <SiPandas />, title: "Pandas", href: "https://pandas.pydata.org/" },
+  { node: <SiNumpy />, title: "NumPy", href: "https://numpy.org/" },
+  { node: <SiScikitlearn />, title: "Scikit-learn", href: "https://scikit-learn.org/" },
+];
 
+ 
 export default function Hero() {
 
   const description = ["Full Stack Developer & Data Scientist building modern web apps and extracting insights with ML."]
 
   return (    
     <PageTransition>
-  <section className="min-h-screen w-full flex flex-col justify-center items-center bg-transparent dark:bg-transparent text-primary dark:text-white-100 relative overflow-hidden">
+  <section className="my-28 pb-36 w-full flex flex-col justify-center items-center bg-transparent dark:bg-transparent text-primary dark:text-white-100 relative overflow-hidden">
         <MotionContainer>
           <div className="max-w-2xl text-center z-10 relative">
             <SplitText
@@ -30,7 +46,6 @@ export default function Hero() {
               threshold={0.4}
               rootMargin="-100px"
               textAlign="center"
-              onLetterAnimationComplete={handleAnimationComplete}
             />
               <RotatingText
                 texts={["FULL STACK DEVELEOPER", "DATA SCIENTIST"]}
@@ -65,6 +80,20 @@ export default function Hero() {
           </div>
         </MotionContainer>
       </section>
+      <div className='h-[200px] relative overflow-hidden mt-20'>
+          <LogoLoop
+            logos={techLogos}
+            speed={120}
+            direction="left"
+            logoHeight={48}
+            gap={40}
+            pauseOnHover
+            scaleOnHover
+            fadeOut
+            fadeOutColor="#ffffff"
+            ariaLabel="Technology partners"
+          />
+        </div>
     </PageTransition>
   );
 }

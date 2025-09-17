@@ -3,20 +3,21 @@ import js from '@eslint/js';
 import reactPlugin from 'eslint-plugin-react';
 
 export default [
-  // Base recommended rules
   js.configs.recommended,
-
-  // React rules
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: {
       react: reactPlugin,
     },
     languageOptions: {
+      parser: '@babel/eslint-parser', 
       parserOptions: {
+        requireConfigFile: false, 
         ecmaVersion: 2021,
         sourceType: 'module',
-        jsx: true, // enable JSX parsing
+        ecmaFeatures: {
+          jsx: true, 
+        },
       },
       globals: {
         browser: true,
@@ -26,17 +27,18 @@ export default [
     },
     settings: {
       react: {
-        version: 'detect',
+        version: 'detect', 
       },
     },
     rules: {
       'react/react-in-jsx-scope': 'off',
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'react/prop-types': 'off', 
     },
   },
 
-  // Ignore generated or dist files
+  // Ignore build and dependency files
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['node_modules/**', 'dist/**', '.next/**'],
   },
 ];

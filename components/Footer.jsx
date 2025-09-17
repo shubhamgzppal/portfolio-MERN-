@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-transparent dark:bg-transparent text-white dark:text-white-100 py-4 text-center border-t border-black-100 dark:border-white-100 drop-shadow-lg">
+    <footer className="text-white dark:text-white-100 py-4 text-center bg-primary/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-card transition-transform duration-300">
       <p className="text-sm font-semibold drop-shadow">&copy; {new Date().getFullYear()} Shubham Pal. All rights reserved.</p>
       <div className="flex justify-center gap-6 mt-2">
         <a href="https://github.com/shubhamgzppal" target="_blank" rel="noopener noreferrer" className="hover:text-tertiary transition font-semibold drop-shadow">GitHub</a>
