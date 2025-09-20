@@ -30,7 +30,7 @@ const LogoLoop = memo(
     const updateLogoHeight = useCallback(() => {
       if (containerRef.current) {
         const height = containerRef.current.clientHeight;
-        setLogoHeight(height * 0.8); // use 80% of container height
+        setLogoHeight(height * 0.9); // use 80% of container height
       }
     }, []);
 

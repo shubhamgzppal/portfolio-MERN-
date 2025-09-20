@@ -1,5 +1,5 @@
 {
-  "name": "portfolio-mern",
+  "name": "ai-chatbot",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -16,14 +16,15 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@gsap/react": "^2.1.2",
-    "@lottiefiles/dotlottie-react": "^0.16.1",
+    "@lottiefiles/dotlottie-react": "^0.16.4",
     "@netlify/plugin-nextjs": "^5.13.2",
     "@react-three/drei": "^9.99.0",
     "@react-three/fiber": "^8.15.16",
     "cheerio": "^1.1.2",
+    "cloudinary": "^2.7.0",
     "dotenv": "^17.2.2",
     "formidable": "^3.5.4",
-    "framer-motion": "^11.0.5",
+    "framer-motion": "^11.18.2",
     "gsap": "^3.13.0",
     "mongoose": "^8.4.4",
     "motion": "^12.23.12",
@@ -40,6 +41,7 @@
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.8.0",
     "react-pdf": "^10.1.0",
+    "streamifier": "^0.1.1",
     "three": "^0.161.0"
   },
   "devDependencies": {

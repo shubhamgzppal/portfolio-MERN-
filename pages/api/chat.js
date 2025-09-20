@@ -1,8 +1,6 @@
 import path from "path";
 import nc from "next-connect";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { connectDB } from "../../lib/db.js";
-import Chat from "../../modele/Chat.js";
 import { extractTextFromPDF } from "../../lib/pdfReader.js";
 import { extractTextFromWebsite } from "../../lib/websiteReader.js";
 
@@ -14,7 +12,7 @@ function corsMiddleware(req, res, next) {
   if (req.method === "OPTIONS") {
     return res.status(204).end();
   }
-  next();
+  next(); 
 }
 
 const apiHandler = nc({ onError, onNoMatch });
@@ -41,20 +39,19 @@ apiHandler.post(async (req, res) => {
       return res.status(400).json({ error: "Chat history is required." });
     }
 
-    await connectDB();
-
-    if (!process.env.GOOGLE_API_KEY) {
-      return res.status(500).json({ error: "Missing GOOGLE_API_KEY in environment." });
-    }
-
-    // --- Load Resume PDF ---
     let localPdfText = "";
     try {
-      const pdfPath = path.join(process.cwd(), "public", "assets", "SHUBHAM PAL Resume canav.pdf");
-      console.log("Reading PDF:", pdfPath);
-      localPdfText = await extractTextFromPDF(pdfPath);
+      // Dynamically get resume URL from your resume API (same as client does)
+      const resumeRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/resume`);
+      const resumeData = await resumeRes.json();
+
+      const resumeUrl = resumeData?.data?.[0]?.resumeUrl;
+      if (!resumeUrl) throw new Error("No resume URL found");
+
+      console.log("Fetching resume from URL:", resumeUrl);
+      localPdfText = await extractTextFromPDF(resumeUrl);
     } catch (err) {
-      console.warn("Failed to extract resume PDF:", err.message);
+      console.warn("Failed to extract resume PDF from server:", err.message);
     }
 
     // --- Load Website ---
@@ -70,10 +67,10 @@ apiHandler.post(async (req, res) => {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
-    const MAX_REPLY_TOKENS = Number(process.env.MAX_REPLY_TOKENS) || 150;
+    const MAX_REPLY_TOKENS = Number(process.env.MAX_REPLY_TOKENS) || 250;
     const MAX_PDF_CHARS = 4000;
     const MAX_MESSAGE_CHARS = 1000;
-    const MAX_HISTORY_MESSAGES = 12;
+    const MAX_HISTORY_MESSAGES = 10;
 
     const safeResume =
       typeof localPdfText === "string" && localPdfText.length > MAX_PDF_CHARS
@@ -102,6 +99,13 @@ apiHandler.post(async (req, res) => {
 
     const safeHistory = truncateHistory(history);
 
+    const formattedHistory = safeHistory.map((msg) => {
+      const speaker = msg.role === "user" ? "User" : "Assistant";
+      const content = msg.parts?.[0]?.text || "";
+      return `${speaker}: ${content}`;
+    }).join("\n");
+
+
     const combinedContext = `You are an AI assistant representing Shubham Pal.
     Respond in first person as his digital assistant — helpful, professional, and concise.
     Only answer based on the provided resume and website content.
@@ -110,7 +114,7 @@ apiHandler.post(async (req, res) => {
     --- Website ---
     ${safeWebsite}
     --- History ---
-    ${JSON.stringify(safeHistory, null, 2)}
+    ${formattedHistory}
     `;
 
     const contents = [
@@ -159,15 +163,6 @@ apiHandler.post(async (req, res) => {
     if (words.length > MAX_REPLY_TOKENS) {
       reply = words.slice(0, MAX_REPLY_TOKENS).join(" ") + "...";
     }
-
-    // --- Save Chat ---
-    try {
-      const lastUserMessage = history[history.length - 1]?.parts?.[0]?.text || "";
-      await Chat.create({ userMessage: lastUserMessage, botReply: reply });
-    } catch (dbErr) {
-      console.warn("Failed to save chat:", dbErr.message);
-    }
-
     return res.status(200).json({ reply });
   } catch (err) {
     console.error("API Fatal Error:", err);

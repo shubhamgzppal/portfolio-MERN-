@@ -1,8 +1,35 @@
 import React, { useState, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import DarkModeToggle from '../components/DarkModeToggle.jsx'
+import { toast } from 'react-hot-toast';
 
-const Navbar = ({ sidebarOpen, setSidebarOpen, activeSection, dark, setDark, showBackground, setShowBackground }) => {
+const Navbar = ({ sidebarOpen, setSidebarOpen, dark, setDark, showBackground, setShowBackground, setActiveSection, activeSection }) => {
   const [toggleCount, setToggleCount] = useState(0);
+  const [showKeywordModal, setShowKeywordModal] = useState(false);
+  const [keywordInput, setKeywordInput] = useState('');
+  const router = useRouter();
+
+  const validKeyword = process.env.NEXT_PUBLIC_SK;
+
+  const handleDashboardAccess = () => {
+  setShowKeywordModal(true); 
+  };
+
+  const handleSubmitKeyword = () => {
+  if (keywordInput === validKeyword) {
+      localStorage.setItem('adminAccess', 'true');
+      toast.success("Access granted!");
+      setShowKeywordModal(false);
+      router.push("/Admin/AdminDashboard");
+  } else {
+      toast.error("Incorrect keyword. Access denied.");
+  }
+  };
+
+  const handleModalClose = () => {
+  setShowKeywordModal(false);
+  setKeywordInput('');
+  };
 
   const handleDarkModeToggle = useCallback((newDarkValue) => {
     setDark(newDarkValue);
@@ -20,77 +47,49 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, activeSection, dark, setDark, sho
 
   return (
     <>
-      {/* Desktop Navbar - only visible on large screens (lg) */}
       <nav className="hidden lg:flex fixed top-0 left-0 right-0 z-40 bg-primary/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-card transition-transform duration-300 translate-y-0">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo/Brand */}
-            <a
-              href="#home"
-              className="text-2xl font-bold text-gray-400 tracking-tight neon drop-shadow-lg"
-            >
-              MyPortfolio
-            </a>
-            {/* Navigation Links */}
-            <ul
-              className="flex items-center gap-8 text-white-100 font-semibold border border-white/5 rounded-full px-6 py-2 bg-transparent drop-shadow"
-            >
-              <li>
-                <a
-                  href="#about"
-                  className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
-                  style={{ WebkitTapHighlightColor: 'transparent' }}
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#projects"
-                  className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
-                  style={{ WebkitTapHighlightColor: 'transparent' }}
-                >
-                  Projects
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#certificates"
-                  className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
-                  style={{ WebkitTapHighlightColor: 'transparent' }}
-                >
-                  Certificates
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#education"
-                  className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
-                  style={{ WebkitTapHighlightColor: 'transparent' }}
-                >
-                  Education
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#resume"
-                  className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
-                  style={{ WebkitTapHighlightColor: 'transparent' }}
-                >
-                  Resume
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#contact"
-                  className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow"
-                  style={{ WebkitTapHighlightColor: 'transparent' }}
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-            {/* Social Links */}
+            <a href="#home" className="text-2xl font-bold text-gray-400 tracking-tight neon drop-shadow-lg">MyPortfolio</a>
+            
+              <ul className="flex items-center gap-8 text-white-100 font-semibold border border-white/5 rounded-full px-6 py-2 bg-transparent drop-shadow">
+                <li>
+                  <a href="#about" className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow" style={{ WebkitTapHighlightColor: 'transparent' }}>
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#projects" className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow" style={{ WebkitTapHighlightColor: 'transparent' }}>
+                    Projects
+                  </a>
+                </li>
+                <li>
+                  <a href="#certificates" className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow" style={{ WebkitTapHighlightColor: 'transparent' }}>
+                    Certificates
+                  </a>
+                </li>
+                <li>
+                  <a href="#education" className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow" style={{ WebkitTapHighlightColor: 'transparent' }}>
+                    Education
+                  </a>
+                </li>
+                <li>
+                  <a href="#resume" className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow" style={{ WebkitTapHighlightColor: 'transparent' }}>
+                    Resume
+                  </a>
+                </li>
+                <li>
+                  <a href="#contact" className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow" style={{ WebkitTapHighlightColor: 'transparent' }}>
+                    Contact
+                  </a>
+                </li>
+                <li>
+                  <a href='#' onClick={handleDashboardAccess} className="text-white-100 hover:text-gray-300 active:text-gray-400 transition-colors duration-200 font-semibold drop-shadow" style={{ WebkitTapHighlightColor: 'transparent' }}>
+                    Admin
+                  </a>
+                </li>
+              </ul>
+
             <div className="flex items-center gap-4">
               <a
                 href="https://github.com/shubhamgzppal"
@@ -132,6 +131,18 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, activeSection, dark, setDark, sho
             </div>
           </div>
         </div>
+        {showKeywordModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-80 max-w-full">
+                <h2 className="text-lg font-semibold mb-4">Enter access keyword</h2>
+                <input type="password" value={keywordInput} onChange={(e) => setKeywordInput(e.target.value)} placeholder="Keyword" className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <div className="flex justify-end space-x-3">
+                  <button onClick={handleModalClose} className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400" >Cancel</button>
+                  <button onClick={handleSubmitKeyword} className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Submit</button>
+                </div>
+              </div>
+            </div>
+          )}
       </nav>
     </>
   );

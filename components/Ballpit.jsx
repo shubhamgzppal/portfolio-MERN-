@@ -549,25 +549,25 @@ class Y extends c {
 
 const X = {
   count: 100,
-  colors: [0,0,0,0], // first color is for light, second is for size0 ball, others are interpolated
+  colors: ['#ffffff', '#F1E7E7', '#06923E' , '#E62727' ],
   materialParams: {
-    metalness: 0.5,
-    roughness: 0.5,
+    metalness: 0.3,
+    roughness: 0.7,
     clearcoat: 1,
-    clearcoatRoughness: 0.15
+    clearcoatRoughness: 0.1
   },
   minSize: 0.5,
   maxSize: 1,
   size0: 1,
-  gravity: 0.01,
-  friction: 0.9975,
+  gravity: 0.2,
+  friction: 0.99,
   wallBounce: 0.95,
   maxVelocity: 0.2,
   maxX: 10,
   maxY: 10,
   maxZ: 2,
   controlSphere0: false,
-  followCursor: false
+  followCursor: true
 };
 
 const U = new m();

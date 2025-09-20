@@ -31,9 +31,9 @@ export default function Hero() {
 
   return (    
     <PageTransition>
-  <section className="my-28 pb-36 w-full flex flex-col justify-center items-center bg-transparent dark:bg-transparent text-primary dark:text-white-100 relative overflow-hidden">
+  <section className="min-h-[80vh] flex flex-col justify-center items-center bg-transparent dark:bg-transparent text-primary dark:text-white-100 relative overflow-hidden">
         <MotionContainer>
-          <div className="max-w-2xl text-center z-10 relative">
+          <div className="max-w-2xl text-center relative">
             <SplitText
               text={"Hi, I am Shubham Pal"}
               className="text-5xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg"
@@ -80,7 +80,7 @@ export default function Hero() {
           </div>
         </MotionContainer>
       </section>
-      <div className='h-[200px] relative overflow-hidden mt-20'>
+      <div className='relative overflow-hidden w-full flex items-center'>
           <LogoLoop
             logos={techLogos}
             speed={120}

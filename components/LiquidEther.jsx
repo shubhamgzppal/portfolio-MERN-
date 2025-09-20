@@ -2,16 +2,16 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 export default function LiquidEther({
-  mouseForce = 80,
+  mouseForce = 20,
   cursorSize = 200,
-  isViscous = false,
+  isViscous = true,
   viscous = 30,
   iterationsViscous = 32,
   iterationsPoisson = 32,
   dt = 0.014,
   BFECC = true,
   resolution = 0.5,
-  isBounce = false,
+  isBounce = true,
   colors = ['#5227FF', '#FF9FFC', '#B19EEF'],
   style = {},
   className = '',

@@ -3,83 +3,32 @@ import PageTransition from '../components/PageTransition';
 import { useState, useRef, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 
-// PDF assets now served from public/assets - reference via URL
-const WebdegineCert = '/assets/MSME WEB degsine certificate.pdf';
-const CoreJavaCert = '/assets/Shubham Pal Core Java Training Certificate.pdf';
-const OLevelCert = '/assets/Shubham pal o level certificate.pdf';
-const PythonForDataScience = '/assets/Shubham Pal Python 101 for Data Science (IBM) certificate.pdf';
-const FoundationsOfAI = '/assets/Shubham pal Foundations of AI (Microsoft) certificate.pdf';
-
-const PdfPreview = dynamic(() => import('../components/PdfPreview'), { ssr: false, loading: () => <div className="text-center">Loading PDF...</div> });
-
-const certificatesData = {
-  FULL_STACK: [
-    {
-      title: "Web Designing Certificate",
-      provider: "Ministry of Micro, Small & Medium Enterprises (MSME)",
-      icon: "MSME",
-      url: WebdegineCert,
-      date: "10 Oct 2024",
-      skills: ["HTML", "CSS", "JavaScript", "WordPress", "Bootstrap", "Responsive Design", "Web Development Fundamentals", "UI/UX Principles", "Web Accessibility", "Web Hosting and Deployment", "Web Design Tools"]
-    },
-    {
-      title: "Core Java",
-      provider: "Internshala",
-      icon: "💻",
-      url: CoreJavaCert,
-      date: "2 Nov 2024",
-      skills: ["Java Introduction and Installation", "Java Programming Fundamentals", "Object Oriented Programming", "Advanced Java Topics", "Database Handling using Java", "GUI Programming", "Java and AI Modules"]
-    },
-    {
-      title: "O Level Certificate",
-      provider: "Government of India, Ministry of Human Resource Development (MHRD)",
-      icon: "NIELIT",
-      url: OLevelCert,
-      date: "07 Mar 2022",
-      skills: ["IT Tools and Business Systems", "Web Design and Development", "Programming and Problem Solving through Python", "Introduction to ICT Resources"]
-    }
-  ],
-  DATA_SCIENCE: [
-    {
-      title: "Foundations of AI",
-      provider: "Microsoft, Edunet Foundation, AICTE",
-      icon: "Microsoft",
-      url: FoundationsOfAI,
-      date: "10 May 2025",
-      skills: ["Artificial Intelligence", "Machine Learning Basics", "AI Ethics", "Data Analysis", "Python Programming", "Problem Solving with AI", "Foundational AI Concepts", "AI Applications", "AI Tools and Platforms"]
-    },
-    {
-      title: "Python 101 for Data Science",
-      provider: "IBM",
-      icon: "📊",
-      url: PythonForDataScience,
-      date: "16 August 2025",
-      skills: ["Python", "Data Analysis", "Data Visualization", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn"]
-    }
-  ]
-};
+// Load PDF preview dynamically (SSR disabled)
+const PdfPreview = dynamic(() => import('../components/PdfPreview'), { ssr: false, loading: () => <div className="text-center text-white">Loading PDF...</div>,});
 
 export default function Certificates() {
-  const certificates = [...certificatesData.FULL_STACK, ...certificatesData.DATA_SCIENCE];
-  const [modal, setModal] = useState(null);
+  const [certificates, setCertificates] = useState([]);
+  const [modalUrl, setModalUrl] = useState(null);
   const modalRef = useRef(null);
 
   useEffect(() => {
-    if (modal) {
+    const fetchCertificates = async () => {
+      try { const res = await fetch('/api/certificates'); const json = await res.json();
+        if (json.success) { setCertificates(json.data);}
+        else {console.error("Error fetching certificates:", json.error);}
+      } catch (err) { console.error("Fetch error:", err);}
+    }; fetchCertificates();
+  }, []);
+
+  useEffect(() => {
+    if (modalUrl) {
       document.body.style.overflow = 'hidden';
-      if (modalRef.current) modalRef.current.focus();
-
-      const handleKeyDown = (e) => {
-        if (e.key === 'Escape') setModal(null);
-      };
-      window.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKeyDown);
-      };
+      modalRef.current?.focus();
+      const handleEscape = (e) => { if (e.key === 'Escape') setModalUrl(null); };
+      window.addEventListener('keydown', handleEscape);
+      return () => { window.removeEventListener('keydown', handleEscape); document.body.style.overflow = ''; };
     }
-  }, [modal]);
+  }, [modalUrl]);
 
   const handleMouseMove = (e, card) => {
     cancelAnimationFrame(card._frame);
@@ -93,59 +42,50 @@ export default function Certificates() {
     });
   };
 
+  const handleMouseLeave = (card) => { card.style.transform = '';};
+
   return (
     <PageTransition>
-      {modal && (
-        <div className="fixed inset-0 z-10 mt-20 flex items-center justify-center bg-black/60" onClick={() => setModal(null)}>
-          <div ref={modalRef} onClick={e => e.stopPropagation()} className='overflow-auto'>
-            <button className='absolute top-4 right-4 z-1 md:hidden text-white' onClick={() => setModal(null)}>Close</button>
-            <Suspense fallback={<div className="text-center">Loading PDF...</div>}>
-              <PdfPreview file={modal} className="rounded border w-[600px]" />
-            </Suspense>
+      {modalUrl && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" onClick={() => setModalUrl(null)}>
+          <div ref={modalRef} onClick={(e) => e.stopPropagation()} className="bg-white rounded-md p-4 max-w-3xl w-full max-h-[90vh] overflow-auto shadow-xl">
+            <div className="flex justify-end">
+              <button onClick={() => setModalUrl(null)} className="text-red-500 font-semibold mb-2">Close ✕</button>
+            </div>
+            <Suspense fallback={<div className="text-center">Loading PDF...</div>}><PdfPreview fileUrl={modalUrl} /></Suspense>
           </div>
         </div>
       )}
 
-      <section className="bg-transparent dark:bg-transparent text-white py-20" id="certificates">
+      <section className="py-20 text-white" id="certificates">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 wavy-underline drop-shadow-lg">Certificates</h2>
-            <p className="text-gray-300 dark:text-gray-300 font-semibold drop-shadow">
-              Professional certifications across Full Stack and Data Science
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 wavy-underline drop-shadow-lg">Certificates </h2>
+            <p className="text-gray-300 font-semibold drop-shadow">Professional certifications across Full Stack and Data Science </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6" style={{ perspective: '1000px', perspectiveOrigin: '50% 50%' }}>
-            {certificates.map((cert, index) => (
-              <div
-                key={index}
+          <div className="grid md:grid-cols-2 gap-6" style={{ perspective: '1000px', perspectiveOrigin: 'center' }}>
+            {certificates.map((cert) => (
+              <div onMouseMove={(e) => handleMouseMove(e, e.currentTarget)} onMouseLeave={(e) => handleMouseLeave(e.currentTarget)} key={cert._id}
                 className="glass bg-white/10 dark:bg-primary/20 rounded-lg p-6 shadow-xl border border-secondary/10 backdrop-blur-sm hover:shadow-2xl font-semibold drop-shadow transition-all duration-300"
-                style={{ transformStyle: 'preserve-3d', boxShadow: '0 12px 32px rgba(0,0,0,0.18), 0 1.5px 8px rgba(0,0,0,0.10)' }}
-                onMouseMove={e => handleMouseMove(e, e.currentTarget)}
-                onMouseLeave={e => (e.currentTarget.style.transform = '')}
-              >
+                style={{ transformStyle: 'preserve-3d', boxShadow:'0 12px 32px rgba(0,0,0,0.18), 0 1.5px 8px rgba(0,0,0,0.10)',}}
+               >
                 <div className="flex items-start gap-4">
-                  <span className="text-3xl pulse">{cert.icon}</span>
+                  <span className="text-3xl">{cert.icon || '📄'}</span>
                   <div className="flex-1">
                     <div className="flex justify-between items-start">
                       <h3 className="font-semibold text-lg text-secondary drop-shadow">{cert.title}</h3>
-                      <span className="text-sm text-gray-300 dark:text-gray-400 font-semibold drop-shadow">{cert.date}</span>
+                      <span className="text-sm text-gray-400 font-semibold drop-shadow">{cert.date}</span>
                     </div>
-                    <p className="text-gray-300 dark:text-gray-300 text-sm mb-3 font-semibold drop-shadow">{cert.provider}</p>
+                    <p className="text-gray-300 text-sm mb-3 font-semibold drop-shadow"> {cert.provider}</p>
                     <div className="flex flex-wrap gap-2 mb-3">
-                      {cert.skills.map((skill, skillIndex) => (
-                        <span
-                          key={skillIndex}
-                          className="px-2 py-1 text-xs rounded-full bg-secondary/10 text-secondary font-semibold drop-shadow transition-transform hover:scale-105"
-                        >
+                      {cert.skills?.map((skill, idx) => (
+                        <span key={idx} className="px-2 py-1 text-xs rounded-full bg-secondary/10 text-secondary font-semibold drop-shadow hover:scale-105 transition-transform">
                           {skill}
                         </span>
                       ))}
                     </div>
-                    <button
-                      onClick={() => setModal(cert.url)}
-                      className="text-sm text-secondary hover:text-tertiary transition-colors flex items-center gap-1 font-semibold drop-shadow focus:outline-none"
-                    >
+                    <button onClick={() => setModalUrl(cert.url)} className="text-sm text-secondary hover:text-tertiary transition-colors flex items-center gap-1 font-semibold drop-shadow focus:outline-none">
                       View Certificate
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
