@@ -33,7 +33,7 @@ const Chatbot = ({ isOpen, onClick }) => {
 
       // Add timeout to fetch to handle network issues
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
       try {
         const res = await fetch("/api/chat", { 

@@ -13,6 +13,8 @@ out/
 .vercel/
 dist/
 *.log
+.netlify/
+
 
 # === Environment Variables ===
 .env
