@@ -63,7 +63,7 @@ async function fetchResumeAndWebsite(origin) {
   // Parallel fetch & extract text
   const [resumeText, websiteText] = await Promise.all([
     extractTextFromPDF(resumeUrl),
-    extractTextFromWebsite("https://shubhamgzppal.netlify.app/"),
+    extractTextFromWebsite(`${origin}`),
   ]);
 
   console.log(`Extracted resume text length: ${resumeText.length}`);
@@ -105,7 +105,7 @@ apiHandler.post(async (req, res) => {
       return res.status(400).json({ error: "Chat history is required." });
     }
 
-    const origin = req.headers.origin || `https://${req.headers.host}`;
+    const origin = req.headers.origin || `http://${req.headers.host}`;
     console.log("Origin for fetching resume:", origin);
 
     // Fetch resume + website with caching & parallel
