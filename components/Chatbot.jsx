@@ -69,13 +69,12 @@ const Chatbot = ({ isOpen, onClick }) => {
           console.error("Service unavailable:", fetchError);
           setMessages(prev => [...prev, { role: "bot", text: "I'm currently unavailable due to a service configuration issue. Please try again later or contact the site administrator." }]);
         } else {
-          throw fetchError; // Re-throw for the outer catch block
+          throw fetchError;
         }
       }
     } catch (err) {
       console.error("Chat error:", err);
-      
-      // Provide a more helpful error message based on the error
+
       let errorMessage = "Sorry, something went wrong. Please try again later.";
       
       if (err.message.includes('API key') || err.message.includes('configuration')) {
@@ -98,10 +97,10 @@ const Chatbot = ({ isOpen, onClick }) => {
       {!isOpen && (
         <div
           onClick={onClick}
-          className="cursor-pointer transition-all duration-300 ease-in-out w-16 h-16 sm:w-20 sm:h-20 md:w-48 md:h-48 items-end hover:scale-150"
+          className="w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 items-end"
           aria-hidden="true"
         >
-          <DotLottieReact src={robotAnimationUrl} loop autoplay style={{ width: '100%', height: '100%' }} />
+          <DotLottieReact src={robotAnimationUrl} loop autoplay className= 'hover:scale-150 cursor-pointer transition-all duration-300 ease-in-out' style={{ width: '100%', height: '100%' }} />
         </div>
       )}
 

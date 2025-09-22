@@ -129,6 +129,7 @@ function App() {
       <Footer />
 
       <div className="fixed right-4 bottom-6 z-50 flex flex-col items-end"><Chatbot onClick={() => setChatOpen(!chatOpen)} isOpen={chatOpen} /></div>
+      
     </div>
   );
 }
