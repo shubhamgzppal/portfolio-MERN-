@@ -46,7 +46,13 @@ const Chatbot = ({ isOpen, onClick }) => {
         clearTimeout(timeoutId);
 
         if (!res.ok) {
-          throw new Error(`Server responded with status: ${res.status}`);
+          const errorData = await res.json().catch(() => ({}));
+          
+          if (res.status === 503) {
+            throw new Error("The chatbot service is temporarily unavailable. Please try again later.");
+          }
+          
+          throw new Error(`Server responded with status: ${res.status}${errorData.details ? `: ${errorData.details}` : ''}`);
         }
 
         const data = await res.json();
@@ -59,13 +65,26 @@ const Chatbot = ({ isOpen, onClick }) => {
         } else if (fetchError.message.includes('network')) {
           console.error("Network error:", fetchError);
           setMessages(prev => [...prev, { role: "bot", text: "Sorry, there was a network error. Please check your internet connection and try again." }]);
+      } else if (fetchError.message.includes('temporarily unavailable')) {
+          console.error("Service unavailable:", fetchError);
+          setMessages(prev => [...prev, { role: "bot", text: "I'm currently unavailable due to a service configuration issue. Please try again later or contact the site administrator." }]);
         } else {
           throw fetchError; // Re-throw for the outer catch block
         }
       }
     } catch (err) {
       console.error("Chat error:", err);
-      setMessages(prev => [...prev, { role: "bot", text: "Sorry, something went wrong. Please try again later." }]);
+      
+      // Provide a more helpful error message based on the error
+      let errorMessage = "Sorry, something went wrong. Please try again later.";
+      
+      if (err.message.includes('API key') || err.message.includes('configuration')) {
+        errorMessage = "The chatbot is currently unavailable due to a configuration issue. Please try again later.";
+      } else if (err.message.includes('timeout') || err.message.includes('timed out')) {
+        errorMessage = "The request took too long to process. Please try again later when the service is less busy.";
+      }
+      
+      setMessages(prev => [...prev, { role: "bot", text: errorMessage }]);
     } finally {
       setLoading(false);
     }

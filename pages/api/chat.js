@@ -226,7 +226,11 @@ ${formattedHistory}
     // --- AI Model Setup ---
     if (!process.env.GOOGLE_API_KEY) {
       console.error("Missing GOOGLE_API_KEY environment variable!");
-      return res.status(500).json({ error: "Missing API key for Google Generative AI" });
+      return res.status(503).json({ 
+        error: "Service Temporarily Unavailable", 
+        details: "The chatbot is currently unavailable due to a configuration issue. Please try again later or contact the site administrator.",
+        adminMessage: "Missing GOOGLE_API_KEY environment variable in deployment"
+      });
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
