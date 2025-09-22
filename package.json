@@ -17,7 +17,7 @@
     "@google/generative-ai": "^0.24.1",
     "@gsap/react": "^2.1.2",
     "@lottiefiles/dotlottie-react": "^0.16.4",
-    "@netlify/plugin-nextjs": "^5.13.2",
+    "@netlify/plugin-nextjs": "^5.13.3",
     "@react-three/drei": "^9.99.0",
     "@react-three/fiber": "^8.15.16",
     "cheerio": "^1.1.2",
