@@ -181,17 +181,17 @@ export default function EditProjects() {
                 <div className="bg-white w-full max-w-2xl p-6 rounded-lg shadow-lg relative">
                   <h3 className="text-xl font-bold mb-4">{editingProject ? 'Edit Project' : 'Add Project'}</h3>
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    <input type="text" value={form.title} onChange={e => handleFormChange('title', e.target.value)} placeholder="Project Title" required className="w-full border p-2 rounded" />
-                    <textarea value={form.description} onChange={e => handleFormChange('description', e.target.value)} placeholder="Description" required className="w-full border p-2 rounded" rows={3} />
-                    <input type="text" value={form.tech} onChange={e => handleFormChange('tech', e.target.value)} placeholder="Tech (comma separated)" className="w-full border p-2 rounded" />
-                    <input type="url" value={form.link} onChange={e => handleFormChange('link', e.target.value)} placeholder="Live Link" className="w-full border p-2 rounded" />
-                    <input type="url" value={form.github} onChange={e => handleFormChange('github', e.target.value)} placeholder="GitHub Link" className="w-full border p-2 rounded" />
-                    <select value={form.category} onChange={e => handleFormChange('category', e.target.value)} className="w-full border p-2 rounded">
+                    <input type="text" value={form.title} onChange={e => handleFormChange('title', e.target.value)} placeholder="Project Title" required className="w-full p-2 rounded" />
+                    <textarea value={form.description} onChange={e => handleFormChange('description', e.target.value)} placeholder="Description" required className="w-full p-2 rounded" rows={3} />
+                    <input type="text" value={form.tech} onChange={e => handleFormChange('tech', e.target.value)} placeholder="Tech (comma separated)" className="w-full p-2 rounded" />
+                    <input type="url" value={form.link} onChange={e => handleFormChange('link', e.target.value)} placeholder="Live Link" className="w-full  p-2 rounded" />
+                    <input type="url" value={form.github} onChange={e => handleFormChange('github', e.target.value)} placeholder="GitHub Link" className="w-full p-2 rounded" />
+                    <select value={form.category} onChange={e => handleFormChange('category', e.target.value)} className="w-full p-2 rounded">
                       <option value="FULL_STACK">FULL_STACK</option>
                       <option value="DATA_SCIENCE">DATA_SCIENCE</option>
                     </select>
 
-                    <input type="file" ref={fileInputRef} accept="image/*,application/pdf,video/*" onChange={handleFileChange} className="w-full border p-2 rounded" />
+                    <input type="file" ref={fileInputRef} accept="image/*,application/pdf,video/*" onChange={handleFileChange} className="w-full p-2 rounded" />
 
                     {(filePreviewURL || form.image) && (
                       <div className="mt-2">

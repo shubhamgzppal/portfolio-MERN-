@@ -8,6 +8,7 @@ const PdfPreview = dynamic(() => import('../components/PdfPreview'), { ssr: fals
 
 export default function Certificates() {
   const [certificates, setCertificates] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [modalUrl, setModalUrl] = useState(null);
   const modalRef = useRef(null);
 
@@ -16,8 +17,9 @@ export default function Certificates() {
       try { const res = await fetch('/api/certificates'); const json = await res.json();
         if (json.success) { setCertificates(json.data);}
         else {console.error("Error fetching certificates:", json.error);}
-      } catch (err) { console.error("Fetch error:", err);}
-    }; fetchCertificates();
+      } catch (err) { console.error("Fetch error:", err);
+      } finally { setLoading(false);}};
+     fetchCertificates();
   }, []);
 
   useEffect(() => {
@@ -34,11 +36,7 @@ export default function Certificates() {
     cancelAnimationFrame(card._frame);
     card._frame = requestAnimationFrame(() => {
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * 8;
-      const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * -8;
-      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+      card.style.transform = `scale(1.10)`;
     });
   };
 
@@ -64,6 +62,8 @@ export default function Certificates() {
             <p className="text-gray-300 font-semibold drop-shadow">Professional certifications across Full Stack and Data Science </p>
           </div>
 
+          {loading ? ( <p className="text-center text-gray-400">Loading certificates...</p>
+            ) : (
           <div className="grid md:grid-cols-2 gap-6" style={{ perspective: '1000px', perspectiveOrigin: 'center' }}>
             {certificates.map((cert) => (
               <div onMouseMove={(e) => handleMouseMove(e, e.currentTarget)} onMouseLeave={(e) => handleMouseLeave(e.currentTarget)} key={cert._id}
@@ -96,6 +96,7 @@ export default function Certificates() {
               </div>
             ))}
           </div>
+          )}
         </div>
       </section>
     </PageTransition>

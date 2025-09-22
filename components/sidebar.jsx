@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import DarkModeToggle from '../components/DarkModeToggle.jsx';
 import { toast } from 'react-hot-toast';
+import Cookies from "js-cookie";
 
 export default function Sidebar({ open, onClose, theme = "dark", dark, setDark, showBackground, setShowBackground }) {
   const sidebarRef = useRef();
@@ -58,7 +59,7 @@ export default function Sidebar({ open, onClose, theme = "dark", dark, setDark, 
 
   const handleSubmitKeyword = () => {
     if (keywordInput === validKeyword) {
-      localStorage.setItem('adminAccess', 'true');
+      Cookies.set("adminAccess", "true", { expires: 1 });
       toast.success("Access granted!");
       setShowKeywordModal(false);
       router.push("/Admin/AdminDashboard");

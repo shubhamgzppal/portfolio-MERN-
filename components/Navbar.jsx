@@ -2,8 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import DarkModeToggle from '../components/DarkModeToggle.jsx'
 import { toast } from 'react-hot-toast';
+import Cookies from "js-cookie";
 
-const Navbar = ({ sidebarOpen, setSidebarOpen, dark, setDark, showBackground, setShowBackground, setActiveSection, activeSection }) => {
+const Navbar = ({ dark, setDark, setShowBackground }) => {
   const [toggleCount, setToggleCount] = useState(0);
   const [showKeywordModal, setShowKeywordModal] = useState(false);
   const [keywordInput, setKeywordInput] = useState('');
@@ -17,7 +18,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, dark, setDark, showBackground, se
 
   const handleSubmitKeyword = () => {
   if (keywordInput === validKeyword) {
-      localStorage.setItem('adminAccess', 'true');
+      Cookies.set("adminAccess", "true", { expires: 1 });
       toast.success("Access granted!");
       setShowKeywordModal(false);
       router.push("/Admin/AdminDashboard");

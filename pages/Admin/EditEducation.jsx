@@ -191,7 +191,7 @@ export default function EditEducation() {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <input type="text" value={form.title} onChange={e => handleFormChange('title', e.target.value)} placeholder="Title" required className="w-full p-2 rounded"/>
                     <input type="text" value={form.institute} onChange={e => handleFormChange('institute', e.target.value)} placeholder="Institute" required className="w-full p-2 rounded"/>
-                    <input type="text" value={form.duration} onChange={e => handleFormChange('duration', e.target.value)} placeholder="Duration (e.g. 2022‑2025)" required className="w-full border p-2 rounded"/>
+                    <input type="text" value={form.duration} onChange={e => handleFormChange('duration', e.target.value)} placeholder="Duration (e.g. 2022‑2025)" required className="w-full p-2 rounded"/>
                     <input type="text" value={form.category} onChange={e => handleFormChange('category', e.target.value)} placeholder="category" required className="w-full p-2 rounded"/>
                     <AutoResizingTextarea value={form.focusAreas} onChange={e => handleFormChange('focusAreas', e.target.value)} placeholder="Focus Areas (Dot-separated )" className="w-full p-2 rounded"/>
                     <AutoResizingTextarea value={form.achievements} onChange={e => handleFormChange('achievements', e.target.value)} placeholder="Achievements (Dot-separated)" className="w-full p-2 rounded"/>

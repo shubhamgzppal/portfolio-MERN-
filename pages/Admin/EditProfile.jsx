@@ -95,21 +95,21 @@ export default function EditProfile() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block mb-1 font-medium">File Title / ID</label>
-                  <input type="text" value={fileTitle} onChange={(e) => setFileTitle(e.target.value)} placeholder="e.g., profile-img" className="w-full border px-4 py-2 rounded" />
+                  <input type="text" value={fileTitle} onChange={(e) => setFileTitle(e.target.value)} placeholder="e.g., profile-img" className="w-full px-4 py-2 rounded" />
                 </div>
 
                 <div>
                   <label className="block mb-1 font-medium">Upload Image / PDF / Video</label>
-                  <input ref={inputFileRef} type="file" accept="image/*,application/pdf,video/*" onChange={handleFileChange} className="w-full border px-4 py-2 rounded" />
+                  <input ref={inputFileRef} type="file" accept="image/*,application/pdf,video/*" onChange={handleFileChange} className="w-full px-4 py-2 rounded" />
                 </div>
 
                 {(filePreviewURL || profile.imgUrl) && (
-                  <div className="border p-4 rounded-lg bg-gray-50">
+                  <div className="w-96 overflow-auto rounded-lg bg-gray-900">
                     <p className="font-medium mb-2">File Preview:</p>
-                    {filePreviewURL ? ( <img src={filePreviewURL} alt="Preview" className="max-w-xs rounded-lg shadow" />
+                    {filePreviewURL ? ( <img src={filePreviewURL} alt="Preview" className="rounded-lg shadow" />
                     ) : profile.imgUrl?.endsWith('.pdf') ? ( <a href={profile.imgUrl} target="_blank" rel="noreferrer" className="text-blue-600 underline">View Uploaded PDF</a>
-                    ) : profile.imgUrl?.includes('video') ? ( <video src={profile.imgUrl} controls className="max-w-xs rounded-lg shadow" />
-                    ) : ( <img src={profile.imgUrl} alt="Existing" className="max-w-xs rounded-lg shadow" />
+                    ) : profile.imgUrl?.includes('video') ? ( <video src={profile.imgUrl} controls className="rounded-lg shadow" />
+                    ) : ( <img src={profile.imgUrl} alt="Existing" className="rounded-lg shadow" />
                     )}
                   </div>
                 )}
@@ -123,22 +123,22 @@ export default function EditProfile() {
 
                 <div>
                   <label className="block mb-1 font-medium">Description</label>
-                  <AutoResizingTextarea value={profile.description} onChange={handleInputChange} className="w-full p-3 rounded border border-gray-300" placeholder="Enter Description here" required />
+                  <AutoResizingTextarea value={profile.description} onChange={handleInputChange} className="w-full p-3 rounded border-gray-300" placeholder="Enter Description here" required />
                 </div>
 
                 <div>
                   <label className="block mb-2 font-medium">Detailed Description</label>
-                  <AutoResizingTextarea value={detailedDescriptionText} onChange={handleDetailedDescriptionChange} className="w-full p-3 rounded border border-gray-300" placeholder="Enter Detailed Description separated by commas" required />
+                  <AutoResizingTextarea value={detailedDescriptionText} onChange={handleDetailedDescriptionChange} className="w-full p-3 rounded border-gray-300" placeholder="Enter Detailed Description separated by commas" required />
                 </div>
 
                 <div>
                   <label className="block mb-1 font-medium">Quote</label>
-                  <input type="text" value={profile.quote} onChange={(e) => handleInputChange('quote', e.target.value)} className="w-full p-3 rounded border border-gray-300" required />
+                  <input type="text" value={profile.quote} onChange={(e) => handleInputChange('quote', e.target.value)} className="w-full p-3 rounded border-gray-300" required />
                 </div>
 
                 <div>
                   <label className="block mb-2 font-medium">Skills</label>
-                  <AutoResizingTextarea value={skillsText} onChange={handleSkillsChange} className="w-full p-3 rounded border border-gray-300" placeholder="Enter skills separated by commas" required />
+                  <AutoResizingTextarea value={skillsText} onChange={handleSkillsChange} className="w-full p-3 rounded border-gray-300" placeholder="Enter skills separated by commas" required />
                 </div>
 
                 <div className="text-center">

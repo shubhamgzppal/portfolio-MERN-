@@ -145,8 +145,8 @@ export default function EditCertificates() {
                         <td className="p-3">{certificate.category}</td>
                         <td className="p-3">{certificate.skills.join(', ')}</td>
                         <td className="p-3 flex gap-2">
-                          <button onClick={() => openModal(certificate)} className="text-blue-400">✏️</button>
-                          <button onClick={() => handleDelete(certificate._id)} className="text-red-400">x</button>
+                          <button onClick={() => openModal(certificate)} className="text-blue-400 bg-none">✏️</button>
+                          <button onClick={() => handleDelete(certificate._id)} className="text-red-400 bg-none">x</button>
                         </td>
                       </tr>
                     ))}
@@ -164,7 +164,7 @@ export default function EditCertificates() {
                     <input type="text" value={form.provider} onChange={(e) => handleFormChange('provider', e.target.value)} placeholder="Provider" required className="w-full p-2 rounded"/>
                     <input type="text" value={form.icon} onChange={(e) => handleFormChange('icon', e.target.value)} placeholder="Icon (emoji or keyword)" className="w-full p-2 rounded"/>
                     <input type="date" value={form.date} onChange={(e) => handleFormChange('date', e.target.value)} className="w-full p-2 rounded"/>
-                    <AutoResizingTextarea value={form.skills} onChange={(e) => handleFormChange('skills', e.target.value)} placeholder="Skills (comma separated)" className="w-full border p-2 rounded"/>
+                    <AutoResizingTextarea value={form.skills} onChange={(e) => handleFormChange('skills', e.target.value)} placeholder="Skills (comma separated)" className="w-full p-2 rounded"/>
                     <select value={form.category} onChange={(e) => handleFormChange('category', e.target.value)} className="w-full p-2 rounded">
                       <option value="FULL_STACK">FULL_STACK</option>
                       <option value="DATA_SCIENCE">DATA_SCIENCE</option>

@@ -2,10 +2,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const navItems = [
-  { id: 'project', label: 'Project', href: '/Admin/EditProject' },
   { id: 'profile', label: 'Profile', href: '/Admin/EditProfile' },
+  { id: 'project', label: 'Project', href: '/Admin/EditProject' },
   { id: 'certificate', label: 'certificate', href: '/Admin/EditCertificate' },
   { id: 'education', label: 'education', href: '/Admin/EditEducation' },
   { id: 'resume', label: 'resume', href: '/Admin/EditResume' },
@@ -14,7 +15,7 @@ const navItems = [
 export default function AdminSidebar() {
   const router = useRouter();
 
-  const handleLogout = () => { router.push('/') }
+  const handleLogout = () => { Cookies.remove("adminAccess"); router.push('/') }
 
   return (
     <aside className="fixed top-0 left-0 h-full w-60 bg-gray-900 text-white shadow-lg z-50 flex flex-col">

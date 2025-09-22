@@ -10,12 +10,13 @@ const PdfPreview = dynamic(() => import('../components/PdfPreview'), { ssr: fals
 
 export default function Education() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(null);
   const [educationData, setEducationData] = useState([]);
   const modalRef = useRef(null);
 
   useEffect(() => {
-    fetch('/api/education').then(res => res.json()).then(data => setEducationData(data.data || [])).catch(err => console.error('Failed to load education data:', err));
+    fetch('/api/education').then(res => res.json()).then(data => setEducationData(data.data || [])).catch(err => console.error('Failed to load education data:', err)).finally(setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -54,11 +55,9 @@ export default function Education() {
               <p className="mb-8 text-white font-semibold drop-shadow">My academic journey and qualifications.</p>
             </motion.div>
 
-            <motion.div
-              ref={ref}
-              initial="hidden"
-              animate={inView ? 'show' : 'hidden'}
-              variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.3 } } }}
+            {loading ? ( <p className="text-center text-gray-400">Loading educatios...</p>
+            ) : (
+            <motion.div ref={ref} initial="hidden" animate={inView ? 'show' : 'hidden'} variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.3 } } }}
               className="mb-8 p-8 glass bg-white/10 dark:bg-primary/20 rounded-lg shadow-xl border border-secondary/10 backdrop-blur-sm mx-4 font-semibold drop-shadow"
             >
               <div className="space-y-8 text-left">
@@ -79,6 +78,7 @@ export default function Education() {
                 ))}
               </div>
             </motion.div>
+            )}
           </div>
         </MotionContainer>
       </section>
