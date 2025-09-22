@@ -1,4 +1,3 @@
-import path from "path";
 import nc from "next-connect";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { extractTextFromPDF } from "../../lib/pdfReader.js";
@@ -12,14 +11,12 @@ function corsMiddleware(req, res, next) {
   if (req.method === "OPTIONS") {
     return res.status(204).end();
   }
-  next(); 
+  next();
 }
 
 const apiHandler = nc({ onError, onNoMatch });
-
 apiHandler.use(corsMiddleware);
 
-// --- Error handling helpers ---
 function onError(err, req, res) {
   console.error("API Error:", err);
   res.status(500).json({ error: "Internal Server Error", details: err.message });
@@ -29,8 +26,61 @@ function onNoMatch(req, res) {
   res.status(405).json({ error: `Method ${req.method} not allowed` });
 }
 
-// --- Main POST handler ---
+// --- Cache Setup ---
+let cachedResumeText = null;
+let cachedWebsiteText = null;
+let lastCacheTime = 0;
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
+async function fetchResumeAndWebsite(origin) {
+  const now = Date.now();
+  if (cachedResumeText && cachedWebsiteText && now - lastCacheTime < CACHE_TTL_MS) {
+    return { resume: cachedResumeText, website: cachedWebsiteText };
+  }
+
+  // Fetch resume URL from your API
+  const resumeRes = await fetch(`${origin}/api/resume`);
+  if (!resumeRes.ok) {
+    throw new Error(`Resume API error: ${resumeRes.status}`);
+  }
+  const resumeData = await resumeRes.json();
+  const resumeUrl = resumeData?.data?.[0]?.resumeUrl;
+  if (!resumeUrl) throw new Error("No resume URL found");
+
+  // Parallel fetch & extract text
+  const [resumeText, websiteText] = await Promise.all([
+    extractTextFromPDF(resumeUrl),
+    extractTextFromWebsite("https://shubhamgzppal.netlify.app/"),
+  ]);
+
+  cachedResumeText = resumeText;
+  cachedWebsiteText = websiteText;
+  lastCacheTime = now;
+
+  return { resume: resumeText, website: websiteText };
+}
+
+// --- History truncation helper ---
+const MAX_HISTORY_MESSAGES = 10;
+const MAX_MESSAGE_CHARS = 1000;
+
+function truncateHistory(history) {
+  const tail = history.slice(-MAX_HISTORY_MESSAGES);
+  return tail.map((msg) => ({
+    ...msg,
+    parts: (msg.parts || []).map((p) => ({
+      ...p,
+      text:
+        typeof p.text === "string" && p.text.length > MAX_MESSAGE_CHARS
+          ? p.text.slice(0, MAX_MESSAGE_CHARS) + "...[truncated]"
+          : p.text,
+    })),
+  }));
+}
+
 apiHandler.post(async (req, res) => {
+  const startTime = Date.now();
+
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const { history } = body;
@@ -39,38 +89,25 @@ apiHandler.post(async (req, res) => {
       return res.status(400).json({ error: "Chat history is required." });
     }
 
+    const origin = req.headers.origin || `https://${req.headers.host}`;
+
+    // Fetch resume + website with caching & parallel
+    const fetchStart = Date.now();
     let localPdfText = "";
-    try {
-      // Dynamically get resume URL from your resume API (same as client does)
-      const resumeRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/resume`);
-      const resumeData = await resumeRes.json();
-
-      const resumeUrl = resumeData?.data?.[0]?.resumeUrl;
-      if (!resumeUrl) throw new Error("No resume URL found");
-
-      console.log("Fetching resume from URL:", resumeUrl);
-      localPdfText = await extractTextFromPDF(resumeUrl);
-    } catch (err) {
-      console.warn("Failed to extract resume PDF from server:", err.message);
-    }
-
-    // --- Load Website ---
     let websiteText = "";
+
     try {
-      const websiteUrl = "https://shubhamgzppal.netlify.app/";
-      websiteText = await extractTextFromWebsite(websiteUrl);
+      const fetched = await fetchResumeAndWebsite(origin);
+      localPdfText = fetched.resume;
+      websiteText = fetched.website;
+      console.log(`Fetched resume + website in ${Date.now() - fetchStart} ms`);
     } catch (err) {
-      console.warn("Failed to extract website text:", err.message);
+      console.warn("Failed to fetch resume or website:", err.message);
     }
 
-    // --- AI Model Setup ---
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-
-    const MAX_REPLY_TOKENS = Number(process.env.MAX_REPLY_TOKENS) || 250;
+    // Truncate content for prompt size
     const MAX_PDF_CHARS = 4000;
-    const MAX_MESSAGE_CHARS = 1000;
-    const MAX_HISTORY_MESSAGES = 10;
+    const MAX_WEBSITE_CHARS = 3000;
 
     const safeResume =
       typeof localPdfText === "string" && localPdfText.length > MAX_PDF_CHARS
@@ -78,45 +115,35 @@ apiHandler.post(async (req, res) => {
         : localPdfText;
 
     const safeWebsite =
-      typeof websiteText === "string" && websiteText.length > 4000
-        ? websiteText.slice(0, 4000) + "\n\n...[truncated]"
+      typeof websiteText === "string" && websiteText.length > MAX_WEBSITE_CHARS
+        ? websiteText.slice(0, MAX_WEBSITE_CHARS) + "\n\n...[truncated]"
         : websiteText;
 
-    // --- History Truncation ---
-    function truncateHistory(hist) {
-      const tail = hist.slice(-MAX_HISTORY_MESSAGES);
-      return tail.map((msg) => ({
-        ...msg,
-        parts: (msg.parts || []).map((p) => ({
-          ...p,
-          text:
-            typeof p.text === "string" && p.text.length > MAX_MESSAGE_CHARS
-              ? p.text.slice(0, MAX_MESSAGE_CHARS) + "...[truncated]"
-              : p.text,
-        })),
-      }));
-    }
-
+    // Truncate history messages
     const safeHistory = truncateHistory(history);
 
-    const formattedHistory = safeHistory.map((msg) => {
-      const speaker = msg.role === "user" ? "User" : "Assistant";
-      const content = msg.parts?.[0]?.text || "";
-      return `${speaker}: ${content}`;
-    }).join("\n");
+    // Format history for prompt
+    const formattedHistory = safeHistory
+      .map((msg) => {
+        const speaker = msg.role === "user" ? "User" : "Assistant";
+        const content = msg.parts?.[0]?.text || "";
+        return `${speaker}: ${content}`;
+      })
+      .join("\n");
 
-
+    // Compose AI prompt context
     const combinedContext = `You are an AI assistant representing Shubham Pal.
-    Respond in first person as his digital assistant — helpful, professional, and concise.
-    Only answer based on the provided resume and website content.
-    --- Resume ---
-    ${safeResume}
-    --- Website ---
-    ${safeWebsite}
-    --- History ---
-    ${formattedHistory}
-    `;
+Respond in first person as his digital assistant — helpful, professional, and concise.
+Only answer based on the provided resume and website content.
+--- Website ---
+${safeWebsite}
+--- Resume ---
+${safeResume}
+--- History ---
+${formattedHistory}
+`;
 
+    // Prepare Gemini content
     const contents = [
       { role: "user", parts: [{ text: combinedContext }] },
       {
@@ -130,15 +157,25 @@ apiHandler.post(async (req, res) => {
       ...safeHistory,
     ];
 
-    // --- Retry Loop for Gemini ---
+    // --- AI Model Setup ---
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+
+    const MAX_REPLY_TOKENS = Number(process.env.MAX_REPLY_TOKENS) || 250;
+
+    // Retry loop for model call
     let reply = null;
     let lastErr = null;
     const maxAttempts = 4;
+
+    const modelCallStart = Date.now();
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         const result = await model.generateContent({ contents });
         reply = result.response.text();
+
+        console.log(`Gemini response generated in ${Date.now() - modelCallStart} ms`);
         break;
       } catch (err) {
         lastErr = err;
@@ -158,11 +195,14 @@ apiHandler.post(async (req, res) => {
         .json({ error: "Failed to generate AI reply", details: lastErr?.message || String(lastErr) });
     }
 
-    // --- Trim reply length ---
+    // Trim reply length to token limit
     const words = reply.split(/\s+/);
     if (words.length > MAX_REPLY_TOKENS) {
       reply = words.slice(0, MAX_REPLY_TOKENS).join(" ") + "...";
     }
+
+    console.log(`Total API time: ${Date.now() - startTime} ms`);
+
     return res.status(200).json({ reply });
   } catch (err) {
     console.error("API Fatal Error:", err);
