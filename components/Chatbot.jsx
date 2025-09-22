@@ -31,14 +31,41 @@ const Chatbot = ({ isOpen, onClick }) => {
         role: msg.role === "bot" ? "model" : "user", parts: [{ text: msg.text }],
       }));
 
-      const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ history: geminiHistory }),});
+      // Add timeout to fetch to handle network issues
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
-      const data = await res.json();
-      const botMessage = { role: "bot", text: data.reply };
-      setMessages(prev => [...prev, botMessage]);
+      try {
+        const res = await fetch("/api/chat", { 
+          method: "POST", 
+          headers: { "Content-Type": "application/json" }, 
+          body: JSON.stringify({ history: geminiHistory }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!res.ok) {
+          throw new Error(`Server responded with status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        const botMessage = { role: "bot", text: data.reply };
+        setMessages(prev => [...prev, botMessage]);
+      } catch (fetchError) {
+        if (fetchError.name === 'AbortError') {
+          console.error("Request timed out:", fetchError);
+          setMessages(prev => [...prev, { role: "bot", text: "Sorry, the request timed out. Please check your internet connection and try again." }]);
+        } else if (fetchError.message.includes('network')) {
+          console.error("Network error:", fetchError);
+          setMessages(prev => [...prev, { role: "bot", text: "Sorry, there was a network error. Please check your internet connection and try again." }]);
+        } else {
+          throw fetchError; // Re-throw for the outer catch block
+        }
+      }
     } catch (err) {
       console.error("Chat error:", err);
-      setMessages(prev => [...prev, { role: "bot", text: "Sorry, something went wrong." }]);
+      setMessages(prev => [...prev, { role: "bot", text: "Sorry, something went wrong. Please try again later." }]);
     } finally {
       setLoading(false);
     }

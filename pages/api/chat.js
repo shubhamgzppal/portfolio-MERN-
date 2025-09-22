@@ -26,6 +26,11 @@ function onNoMatch(req, res) {
   res.status(405).json({ error: `Method ${req.method} not allowed` });
 }
 
+// Add GET handler for health check
+apiHandler.get((req, res) => {
+  res.status(200).json({ status: "ok", message: "Chat API is running. Use POST method to interact with the chatbot." });
+});
+
 // --- Cache Setup ---
 let cachedResumeText = null;
 let cachedWebsiteText = null;
@@ -41,39 +46,67 @@ async function fetchResumeAndWebsite(origin) {
 
   console.log("Fetching resume and website text afresh");
 
-  // Fetch resume URL from your API
-  const resumeUrlEndpoint = `${origin}/api/resume`;
-  console.log("Fetching resume URL from:", resumeUrlEndpoint);
+  try {
+    // Fetch resume URL from your API with timeout
+    const resumeUrlEndpoint = `${origin}/api/resume`;
+    console.log("Fetching resume URL from:", resumeUrlEndpoint);
 
-  const resumeRes = await fetch(resumeUrlEndpoint);
-  if (!resumeRes.ok) {
-    throw new Error(`Resume API error: ${resumeRes.status} ${resumeRes.statusText}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    try {
+      const resumeRes = await fetch(resumeUrlEndpoint, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (!resumeRes.ok) {
+        throw new Error(`Resume API error: ${resumeRes.status} ${resumeRes.statusText}`);
+      }
+
+      const resumeData = await resumeRes.json();
+      console.log("Resume API response data:", resumeData);
+
+      const resumeUrl = resumeData?.data?.[0]?.resumeUrl;
+      if (!resumeUrl) {
+        throw new Error("No resume URL found in the resume API response");
+      }
+
+      console.log("Extracting text from resume PDF at URL:", resumeUrl);
+
+      // Parallel fetch & extract text with individual error handling
+      const [resumeText, websiteText] = await Promise.allSettled([
+        extractTextFromPDF(resumeUrl),
+        extractTextFromWebsite("https://shubhamgzppal.netlify.app/"),
+      ]);
+
+      // Handle potential failures in either promise
+      const finalResumeText = resumeText.status === 'fulfilled' ? resumeText.value : "Unable to load resume content";
+      const finalWebsiteText = websiteText.status === 'fulfilled' ? websiteText.value : "Unable to load website content";
+
+      console.log(`Extracted resume text length: ${finalResumeText.length}`);
+      console.log(`Extracted website text length: ${finalWebsiteText.length}`);
+
+      cachedResumeText = finalResumeText;
+      cachedWebsiteText = finalWebsiteText;
+      lastCacheTime = now;
+
+      return { resume: finalResumeText, website: finalWebsiteText };
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === 'AbortError') {
+        console.error("Resume API request timed out:", fetchError);
+        throw new Error("Resume API request timed out. Please try again later.");
+      }
+      throw fetchError; // Re-throw for outer catch
+    }
+  } catch (error) {
+    console.error("Error in fetchResumeAndWebsite:", error);
+    // Return fallback content if we have cached data, otherwise throw
+    if (cachedResumeText && cachedWebsiteText) {
+      console.log("Using stale cached data due to fetch error");
+      return { resume: cachedResumeText, website: cachedWebsiteText };
+    }
+    throw error;
   }
-
-  const resumeData = await resumeRes.json();
-  console.log("Resume API response data:", resumeData);
-
-  const resumeUrl = resumeData?.data?.[0]?.resumeUrl;
-  if (!resumeUrl) {
-    throw new Error("No resume URL found in the resume API response");
-  }
-
-  console.log("Extracting text from resume PDF at URL:", resumeUrl);
-
-  // Parallel fetch & extract text
-  const [resumeText, websiteText] = await Promise.all([
-    extractTextFromPDF(resumeUrl),
-    extractTextFromWebsite(`${origin}`),
-  ]);
-
-  console.log(`Extracted resume text length: ${resumeText.length}`);
-  console.log(`Extracted website text length: ${websiteText.length}`);
-
-  cachedResumeText = resumeText;
-  cachedWebsiteText = websiteText;
-  lastCacheTime = now;
-
-  return { resume: resumeText, website: websiteText };
 }
 
 // --- History truncation helper ---
@@ -98,30 +131,45 @@ apiHandler.post(async (req, res) => {
   const startTime = Date.now();
 
   try {
-    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-    const { history } = body;
-
-    if (!history || !Array.isArray(history) || history.length === 0) {
-      return res.status(400).json({ error: "Chat history is required." });
-    }
-
-    const origin = req.headers.origin || `http://${req.headers.host}`;
-    console.log("Origin for fetching resume:", origin);
-
-    // Fetch resume + website with caching & parallel
-    let localPdfText = "";
-    let websiteText = "";
+    // Add request timeout handling
+    const requestTimeout = setTimeout(() => {
+      console.error("API request timeout after 30 seconds");
+      if (!res.headersSent) {
+        res.status(504).json({ error: "Request timeout", details: "The request took too long to process" });
+      }
+    }, 30000); // 30 second timeout
 
     try {
-      const fetched = await fetchResumeAndWebsite(origin);
-      localPdfText = fetched.resume;
-      websiteText = fetched.website;
-      console.log(`Fetched resume + website successfully`);
-    } catch (err) {
-      console.warn("Failed to fetch resume or website:", err.message);
-      // You might want to return an error here or continue without resume/website
-      return res.status(500).json({ error: "Failed to fetch resume or website content", details: err.message });
-    }
+      const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+      const { history } = body;
+
+      if (!history || !Array.isArray(history) || history.length === 0) {
+        clearTimeout(requestTimeout);
+        return res.status(400).json({ error: "Chat history is required." });
+      }
+
+      const origin = req.headers.origin || `https://${req.headers.host}`;
+      console.log("Origin for fetching resume:", origin);
+
+      // Fetch resume + website with caching & parallel
+      let localPdfText = "";
+      let websiteText = "";
+
+      try {
+        const fetched = await fetchResumeAndWebsite(origin);
+        localPdfText = fetched.resume;
+        websiteText = fetched.website;
+        console.log(`Fetched resume + website successfully`);
+      } catch (err) {
+        console.warn("Failed to fetch resume or website:", err.message);
+        // Continue with empty content rather than failing completely
+        console.log("Continuing with empty content due to fetch error");
+        // Only return error for specific critical failures
+        if (err.message.includes("API key") || err.message.includes("authentication")) {
+          clearTimeout(requestTimeout);
+          return res.status(500).json({ error: "Failed to fetch resume or website content", details: err.message });
+        }
+      }
 
     // Truncate content for prompt size
     const MAX_PDF_CHARS = 4000;
@@ -226,11 +274,26 @@ ${formattedHistory}
     }
 
     console.log(`Total API time: ${Date.now() - startTime} ms`);
-
+    
+    clearTimeout(requestTimeout); // Clear the timeout before sending response
     return res.status(200).json({ reply });
+    
+    } catch (innerErr) {
+      clearTimeout(requestTimeout); // Clear timeout on inner errors
+      console.error("API Inner Error:", innerErr);
+      return res.status(500).json({ 
+        error: "Error processing request", 
+        details: innerErr.message,
+        type: innerErr.name || "UnknownError"
+      });
+    }
   } catch (err) {
     console.error("API Fatal Error:", err);
-    return res.status(500).json({ error: "Unexpected error", details: err.message });
+    return res.status(500).json({ 
+      error: "Unexpected error", 
+      details: err.message,
+      type: err.name || "UnknownError"
+    });
   }
 });
 
