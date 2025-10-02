@@ -234,7 +234,7 @@ ${formattedHistory}
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const MAX_REPLY_TOKENS = Number(process.env.MAX_REPLY_TOKENS) || 250;
 
