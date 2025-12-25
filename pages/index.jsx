@@ -12,7 +12,6 @@ import Resume from './Resume.jsx'
 import Footer from '../components/Footer.jsx'
 import Sidebar from '../components/sidebar.jsx'
 import Navbar from '../components/Navbar.jsx'
-import Background3D from '../components/Background3D.jsx'
 import Chatbot from '../components/Chatbot.jsx'
 
 function App() {
@@ -108,7 +107,6 @@ function App() {
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      {showBackground && <Background3D theme={dark ? 'dark' : 'light'} section={activeSection} />}
       
       <button className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/20 dark:bg-gray-800/80 hover:bg-secondary/30 dark:hover:bg-gray-700/80 transition transform xl:hidden shadow-md"
         onClick={() => setSidebarOpen(true)} aria-label="Open menu" style={{ backdropFilter: 'blur(10px)', pointerEvents:"auto" }}

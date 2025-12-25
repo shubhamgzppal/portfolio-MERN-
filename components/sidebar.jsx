@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useRouter } from 'next/router';
-import DarkModeToggle from '../components/DarkModeToggle.jsx';
 import { toast } from 'react-hot-toast';
 import Cookies from "js-cookie";
 
@@ -14,22 +13,7 @@ export default function Sidebar({ open, onClose, theme = "dark", dark, setDark, 
 
   const validKeyword = process.env.NEXT_PUBLIC_SK;
 
-  // Handle dark mode toggle
-  useEffect(() => {
-    if (dark !== undefined && dark !== prevDarkRef.current) {
-      prevDarkRef.current = dark;
-      setToggleCount((prevCount) => {
-        const newCount = prevCount + 1;
-        if (newCount === 2) {
-          setShowBackground(false);
-        } else if (newCount === 3) {
-          setShowBackground(true);
-          return 0;
-        }
-        return newCount;
-      });
-    }
-  }, [dark, setShowBackground]);
+  // Dark-mode toggle behavior removed
 
   // Close sidebar when clicking outside
   useEffect(() => {
@@ -100,11 +84,7 @@ export default function Sidebar({ open, onClose, theme = "dark", dark, setDark, 
           <a className={textClass + " text-lg cursor-pointer"} onClick={handleDashboardAccess}>Admin</a>
         </nav>
 
-        <div className="border border-white/10 rounded-full cursor-pointer item-center">
-          <div className="flex items-center text-lg px-2 gap-2">
-            Change-<DarkModeToggle dark={dark} setDark={setDark} />
-          </div>
-        </div>
+        {/* dark-mode toggle removed */}
 
         <div className="flex items-center gap-4">
           <a
