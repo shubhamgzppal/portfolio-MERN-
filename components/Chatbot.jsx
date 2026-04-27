@@ -147,7 +147,7 @@ const Chatbot = ({ isOpen, onClick }) => {
             onKeyDown={handleKeyDown}
             disabled={loading}
             placeholder="Ask something..."
-            className="flex-grow px-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-500"
+            className="flex-grow px-4 py-2 text-black rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-500"
           />
           <button onClick={sendMessage} disabled={loading} className="ml-2 px-4 py-2 bg-none rounded-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400">
             Send
