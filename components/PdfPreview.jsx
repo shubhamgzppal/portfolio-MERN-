@@ -28,15 +28,15 @@ export default function PdfPreview({ fileUrl, className='' }) {
   const pageWidth = containerWidth ? Math.min(Math.max(containerWidth - 32, 200), 900) : undefined;
 
   return (
-    <div className={`items-center justify-center${className}`}>
-      <div ref={containerRef} className="overflow-auto flex justify-center items-start" style={{ width: '100%', maxWidth: '900px', maxHeight: '100%' }}>
-        <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={onDocumentLoadError} className="flex"
-          loading={<div className="animate-spin rounded-full items-center justify-center h-12 w-12 border-t-2 border-b-2 border-secondary"></div>}
+    <div className={`flex flex-col items-center justify-center${className}`}>
+      <div ref={containerRef} className="overflow-auto flex justify-center items-start w-full" style={{ maxWidth: '900px', maxHeight: '600px' }}>
+        <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={onDocumentLoadError}
+          loading={<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>}
           error={<p className="text-red-500">{loadError ? `Failed to load PDF: ${loadError}` : 'Failed to load PDF.'}</p>}
         >
           <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} className="shadow-lg rounded" width={pageWidth} scale={scale} />
         </Document>
-    </div>
+      </div>
 
     <div className="flex justify-center items-center gap-4 mt-4">
         <button onClick={() => setScale(s => Math.max(0.2, +(s - 0.1).toFixed(2)))} className="px-3 py-1 rounded bg-gray-600 text-white" aria-label="Zoom out">

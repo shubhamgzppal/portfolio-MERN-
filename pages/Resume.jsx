@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PageTransition from '../components/PageTransition.jsx';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-hot-toast';
 const PdfPreview = dynamic(() => import('../components/PdfPreview.jsx'), { ssr: false, loading: () => <div className="text-center">Loading PDF...</div> });
 
 export default function Resume() {
@@ -11,6 +12,23 @@ export default function Resume() {
     const fetchResumes = async () => {
       try { const res = await fetch('/api/resume'); const data = await res.json(); if (res.ok) setResumes(data.data); else toast.error(data.error || 'Failed to fetch resumes');} 
       catch { toast.error('Error fetching resumes');}
+    };
+
+    const handlePdfDownload = async (url, fileName) => {
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      } catch (error) {
+        toast.error('Failed to download PDF');
+      }
     };
 
   return (
@@ -28,14 +46,14 @@ export default function Resume() {
               <>
                 <PdfPreview fileUrl={resumes[0].resumeUrl} />
                 <div className="pb-2 text-center text-sm text-gray-300">
-                  If the preview does not display,<a href={resumes[0].resumeUrl} download className="text-secondary underline">click here to download the PDF</a>.
+                  If the preview does not display,<a onClick={() => handlePdfDownload(resumes[0].resumeUrl, 'Resume.pdf')} className="text-secondary underline cursor-pointer">click here to download the PDF</a>.
                 </div>
                 <div className="mb-6 text-center">
-                  <a href={resumes[0].resumeUrl} download="SHUBHAM_PAL_Resume.pdf"
+                  <button onClick={() => handlePdfDownload(resumes[0].resumeUrl, 'SHUBHAM_PAL_Resume.pdf')}
                     className="inline-block bg-secondary text-primary px-6 py-2 rounded-lg font-semibold shadow-card hover:bg-tertiary transition"
                   >
                     Download Resume
-                  </a>
+                  </button>
                 </div>
               </>
             ) : (
