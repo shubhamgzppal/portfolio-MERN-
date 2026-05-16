@@ -39,13 +39,6 @@ export default function PdfPreview({ fileUrl, className = "" }) {
     : undefined;
 
   return (
-<<<<<<< HEAD
-    <div className={`flex flex-col items-center justify-center${className}`}>
-      <div ref={containerRef} className="overflow-auto flex justify-center items-start w-full" style={{ maxWidth: '900px', maxHeight: '600px' }}>
-        <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={onDocumentLoadError}
-          loading={<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>}
-          error={<p className="text-red-500">{loadError ? `Failed to load PDF: ${loadError}` : 'Failed to load PDF.'}</p>}
-=======
     <div className={`w-full flex flex-col items-center ${className}`}>
       
       {/* PDF Viewer */}
@@ -66,7 +59,6 @@ export default function PdfPreview({ fileUrl, className = "" }) {
               {loadError ? `Failed to load PDF: ${loadError}` : "Failed to load PDF"}
             </p>
           }
->>>>>>> abbc06305e4d0770715a3968be62ab8c5f5afa0d
         >
           {Array.from(new Array(numPages), (_, index) => (
             <Page
