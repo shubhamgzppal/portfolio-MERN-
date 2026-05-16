@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-
-pdfjs.GlobalWorkerOptions.workerSrc =
-  `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+import * as pdfjsLib from "pdfjs-dist";
 
 export default function PdfPreview({ fileUrl, className = "" }) {
   const [numPages, setNumPages] = useState(null);
@@ -11,6 +9,13 @@ export default function PdfPreview({ fileUrl, className = "" }) {
   const [scale, setScale] = useState(1);
 
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const workerUrl = `/pdf.worker.min.mjs`;
+      pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+    }
+  }, []);
 
   const onLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
